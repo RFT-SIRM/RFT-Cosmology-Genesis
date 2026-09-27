@@ -1,9 +1,10 @@
 # RFT-Cosmology-Genesis
 
-[![CI](https://github.com/RFT-SIRM/RFT-Cosmology-Genesis/actions/workflows/ci.yml/badge.svg)](https://github.com/RFT-SIRM/RFT-Cosmology-Genesis/actions/workflows/ci.yml)
-[![Status](https://img.shields.io/badge/status-phenomenological%20baseline-blue)](./RESEARCH_STATUS.md)
-[![Reproducibility](https://img.shields.io/badge/reproducibility-locked-green)](./RESULTS.md)
-[![License](https://img.shields.io/badge/license-Apache--2.0-orange)](./LICENSE)
+[![CI](https://img.shields.io/github/actions/workflow/status/RFT-SIRM/RFT-Cosmology-Genesis/ci.yml?branch=main&style=for-the-badge&label=CI)](https://github.com/RFT-SIRM/RFT-Cosmology-Genesis/actions/workflows/ci.yml)
+[![Status](https://img.shields.io/badge/status-phenomenological%20baseline-2563eb?style=for-the-badge)](./RESEARCH_STATUS.md)
+[![Reproducibility](https://img.shields.io/badge/reproducibility-locked-16a34a?style=for-the-badge)](./RESULTS.md)
+[![License](https://img.shields.io/badge/license-Apache%202.0-ea580c?style=for-the-badge)](./LICENSE)
+[![Python](https://img.shields.io/badge/python-3.11-3776AB?style=for-the-badge&logo=python&logoColor=white)](https://www.python.org)
 
 ## Purpose
 
@@ -13,60 +14,45 @@
 
 ## Mathematical input
 
-\[
+$$
 I_m(\theta)=-16\frac{3^{m-1}+1}{3^{m+1}+3}\sin^2\!\left(\frac{\theta}{2}\right).
-\]
+$$
 
-At \(\theta=\pi/2\):
+At $\theta=\pi/2$:
 
-\[
+$$
 I_\infty=-\frac{8}{9}.
-\]
+$$
 
 Pass-1 coupling:
 
-\[
+$$
 q_m=1+\epsilon\,I_m.
-\]
+$$
 
-Implementation: `src/model.py` (invariant / coupling), `src/cosmology.py` (background integrals and peak mapping).
+Implementation: [`src/model.py`](./src/model.py), [`src/cosmology.py`](./src/cosmology.py).
 
 ## Scientific status
 
 | Layer | Location |
 |-------|----------|
-| Mathematical input | `src/model.py` |
-| Phenomenological assumptions | `MODEL_SPEC.md` |
-| Numerical implementation | `src/cosmology.py` |
-| Reference results | `RESULTS.md` |
-| Limitations | `LIMITATIONS.md` |
-| Research status | `RESEARCH_STATUS.md` |
+| Mathematical input | [`src/model.py`](./src/model.py) |
+| Phenomenological assumptions | [`MODEL_SPEC.md`](./MODEL_SPEC.md) |
+| Numerical implementation | [`src/cosmology.py`](./src/cosmology.py) |
+| Reference results | [`RESULTS.md`](./RESULTS.md) |
+| Limitations | [`LIMITATIONS.md`](./LIMITATIONS.md) |
+| Research status | [`RESEARCH_STATUS.md`](./RESEARCH_STATUS.md) |
 
-A prior analysis reported three independent numerical routes agreeing to approximately \(2.9\times10^{-15}\) on a control value of \(\theta_*\). That figure is preserved as a **reference result**, not silently relabeled as an independent reproduction in this repo.
+Reference numerical agreement on control $\theta_*$: approximately $2.9\times10^{-15}$ (prior analysis; preserved as reference).
 
 ## Reproduction
 
-```bash
-python3 -m venv .venv
-source .venv/bin/activate
-pip install -r requirements.txt
-python -m pytest -q
-```
+    python3 -m venv .venv
+    source .venv/bin/activate
+    pip install -r requirements.txt
+    python -m pytest -q
 
-Expected: `4 passed`.
-
-## Repository map
-
-| Path | Role |
-|------|------|
-| `src/model.py` | invariant, limit, remainder, coupling |
-| `src/cosmology.py` | H(z), sound horizon, theta_s, peak map |
-| `tests/test_model.py` | locked unit tests |
-| `MODEL_SPEC.md` | model specification |
-| `RESULTS.md` | reference numbers |
-| `LIMITATIONS.md` | what is not claimed |
-| `EXPERT_REVIEW.md` | review notes |
-| `.github/workflows/ci.yml` | CI |
+Expected: 4 passed.
 
 ## Related repositories
 
@@ -76,4 +62,4 @@ Expected: `4 passed`.
 
 ## License
 
-Apache-2.0 — see `LICENSE`.
+Apache-2.0 — see [`LICENSE`](./LICENSE).

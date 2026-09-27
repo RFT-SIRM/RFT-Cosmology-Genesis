@@ -6,49 +6,50 @@ This repository implements a reduced phenomenological model connecting the RFT i
 
 ## Invariant
 
-For the model used here,
+$$
+I_m(\theta)=-16\frac{3^{m-1}+1}{3^{m+1}+3}\sin^2\!\left(\frac{\theta}{2}\right).
+$$
 
-\[
-I_m(\theta)=
--16\frac{3^{m-1}+1}{3^{m+1}+3}
-\sin^2\left(\frac{\theta}{2}\right).
-\]
+For $\theta=\pi/2$:
 
-For \(\theta=\pi/2\),
+$$
+I_m=-8\frac{3^{m-1}+1}{3^{m+1}+3},\qquad\lim_{m\to\infty}I_m=-\frac{8}{9}.
+$$
 
-\[
-I_m=-8\frac{3^{m-1}+1}{3^{m+1}+3},
-\qquad
-\lim_{m\to\infty}I_m=-\frac89.
-\]
+Remainder:
 
-The finite-level remainder is
-
-\[
-I_m+\frac89=-\frac{16}{9(3^m+1)}.
-\]
+$$
+I_m+\frac{8}{9}=-\frac{16}{9(3^m+1)}.
+$$
 
 ## Phenomenological coupling
 
-The implemented ansatz is
+$$
+q_m=1+\epsilon\,I_m.
+$$
 
-\[
-q_m=1+\epsilon I_m.
-\]
+The parameter $\epsilon$ is phenomenological. This repository does not establish a physical origin for it.
 
-The parameter \(\epsilon\) is phenomenological. This repository does not establish a physical origin for it.
+## Background response
 
-## Cosmological calculation
+$$
+H_m^2(z)=H_0^2\big[\Omega_m(1+z)^3+(\Omega_\nu+q_m\Omega_\gamma)(1+z)^4+\Omega_{\Lambda,m}\big],
+$$
 
-The code evaluates the resulting reduced background quantities and derives:
+$$
+\Omega_{\Lambda,m}=1-\Omega_m-\Omega_\nu-q_m\Omega_\gamma.
+$$
 
-- sound horizon;
-- comoving distance;
-- angular sound scale;
-- fixed-phase acoustic multipole rescaling.
+Angular scale: $\theta_{s,m}=r_{s,m}/\chi_m$.
 
-The acoustic peak calculation uses the supplied baseline multipoles as reference inputs. It is therefore a response calculation, not a full CMB parameter fit.
+## What is locked
 
-## Numerical scope
+- analytic $I_m(\theta)$ and $I_\infty=-8/9$
+- definition of $q_m$
+- unit tests on the invariant layer
 
-This model is not a replacement for a Boltzmann code. Recombination, full perturbation evolution, polarization, lensing, neutrino anisotropic stress, parameter covariance, and likelihood evaluation are outside the present implementation.
+## What is not claimed
+
+- physical origin of $\epsilon$
+- explanation of the observed CMB
+- experimental validation
