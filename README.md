@@ -1,48 +1,48 @@
 # RFT-Cosmology-Genesis
 
-![CI](https://github.com/RFT-SIRM/RFT-Cosmology-Genesis/actions/workflows/ci.yml/badge.svg)
-![Status](https://img.shields.io/badge/status-phenomenological%20baseline-blue)
-![Reproducibility](https://img.shields.io/badge/reproducibility-locked-green)
-![License](https://img.shields.io/badge/license-Apache--2.0-orange)
+[![CI](https://github.com/RFT-SIRM/RFT-Cosmology-Genesis/actions/workflows/ci.yml/badge.svg)](https://github.com/RFT-SIRM/RFT-Cosmology-Genesis/actions/workflows/ci.yml)
+[![Status](https://img.shields.io/badge/status-phenomenological%20baseline-blue)](./RESEARCH_STATUS.md)
+[![Reproducibility](https://img.shields.io/badge/reproducibility-locked-green)](./RESULTS.md)
+[![License](https://img.shields.io/badge/license-Apache--2.0-orange)](./LICENSE)
 
 ## Purpose
 
-`RFT-Cosmology-Genesis` records a reproducible Pass-1 phenomenological calculation that maps the intensive invariant used by the RFT mathematical work into an explicit photon-sector coupling ansatz and evaluates its background/geometric CMB response.
+`RFT-Cosmology-Genesis` records a reproducible **Pass-1 phenomenological** calculation that maps the intensive spectral invariant from the RFT mathematical line into an explicit photon-sector coupling ansatz and evaluates its **background / geometric** CMB response.
 
 **This repository does not claim that the coupling is a physical cosmological interaction or that it explains the observed CMB.**
 
-## Model
+## Mathematical input
 
 \[
-I_m(\theta)=-16\frac{3^{m-1}+1}{3^{m+1}+3}\sin^2(\theta/2).
+I_m(\theta)=-16\frac{3^{m-1}+1}{3^{m+1}+3}\sin^2\!\left(\frac{\theta}{2}\right).
 \]
 
 At \(\theta=\pi/2\):
 
 \[
-I_\infty=-8/9.
+I_\infty=-\frac{8}{9}.
 \]
 
-The Pass-1 coupling is
+Pass-1 coupling:
 
 \[
-q_m=1+\epsilon I_m.
+q_m=1+\epsilon\,I_m.
 \]
 
-The resulting background, sound horizon, distance, angular sound scale, and fixed-phase acoustic multipole mapping are implemented in `src/`.
+Implementation: `src/model.py` (invariant / coupling), `src/cosmology.py` (background integrals and peak mapping).
 
 ## Scientific status
 
-The repository separates:
+| Layer | Location |
+|-------|----------|
+| Mathematical input | `src/model.py` |
+| Phenomenological assumptions | `MODEL_SPEC.md` |
+| Numerical implementation | `src/cosmology.py` |
+| Reference results | `RESULTS.md` |
+| Limitations | `LIMITATIONS.md` |
+| Research status | `RESEARCH_STATUS.md` |
 
-- mathematical input;
-- phenomenological assumptions;
-- numerical implementation;
-- reference results;
-- limitations;
-- future observational tests.
-
-The supplied prior analysis reports three independent numerical routes agreeing to approximately `2.9e-15` in the control value of `theta_*`. That result is preserved as a reference result and is not silently relabeled as an independent reproduction.
+A prior analysis reported three independent numerical routes agreeing to approximately \(2.9\times10^{-15}\) on a control value of \(\theta_*\). That figure is preserved as a **reference result**, not silently relabeled as an independent reproduction in this repo.
 
 ## Reproduction
 
@@ -50,26 +50,30 @@ The supplied prior analysis reports three independent numerical routes agreeing 
 python3 -m venv .venv
 source .venv/bin/activate
 pip install -r requirements.txt
-pytest -q
+python -m pytest -q
+```
 
-### Команда 8 — CI + лицензия
+Expected: `4 passed`.
 
-```bash
-cat > .github/workflows/ci.yml <<'EOF'
-name: CI
+## Repository map
 
-on:
-  push:
-  pull_request:
+| Path | Role |
+|------|------|
+| `src/model.py` | invariant, limit, remainder, coupling |
+| `src/cosmology.py` | H(z), sound horizon, theta_s, peak map |
+| `tests/test_model.py` | locked unit tests |
+| `MODEL_SPEC.md` | model specification |
+| `RESULTS.md` | reference numbers |
+| `LIMITATIONS.md` | what is not claimed |
+| `EXPERT_REVIEW.md` | review notes |
+| `.github/workflows/ci.yml` | CI |
 
-jobs:
-  test:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
-        with:
-          python-version: "3.11"
-      - run: python -m pip install --upgrade pip
-      - run: pip install -r requirements.txt
-      - run: pytest -q
+## Related repositories
+
+- [Evgeny-Theorem](https://github.com/RFT-SIRM/Evgeny-Theorem)
+- [RFT-QPU-Sierpinski](https://github.com/RFT-SIRM/RFT-QPU-Sierpinski)
+- [RFT-Invariant-Battery.](https://github.com/RFT-SIRM/RFT-Invariant-Battery.)
+
+## License
+
+Apache-2.0 — see `LICENSE`.
