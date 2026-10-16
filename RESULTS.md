@@ -15,6 +15,10 @@ Current local test result:
 
 `4 passed`.
 
+## Exact invariant theorem
+
+The repository now documents an analytic derivation of the limit \(I_\infty(\theta)=-\frac{16}{9}\sin^2(\theta/2)\) and exact remainder \(I_m-I_\infty=-\frac{32}{9(3^m+1)}\sin^2(\theta/2)\). Python tests cover representative finite levels and angles. These tests are computational checks; no Lean formalization is claimed.
+
 ## Interpretation
 
 The calculation demonstrates numerical behavior of the specified reduced model. It does not demonstrate that the phenomenological coupling exists in nature.
