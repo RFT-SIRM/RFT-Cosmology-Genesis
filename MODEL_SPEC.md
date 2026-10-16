@@ -38,7 +38,7 @@ I_m(\theta)-I_\infty(\theta)
 =-\frac{32}{9(3^m+1)}\sin^2\!\left(\frac{\theta}{2}\right).
 \]
 
-At \(\theta=\pi/2\), this reduces to the special case already recorded above. A derivation is given in [Exact Invariant Remainder Theorem](EXACT_INVARIANT_REMAINDER_THEOREM.md). This is an algebraic result for the stated formula; it is not yet a Lean machine-checked theorem.
+At \(\theta=\pi/2\), this reduces to the special case already recorded above. A derivation is given in [Exact Invariant Remainder Theorem](EXACT_INVARIANT_REMAINDER_THEOREM.md). The finite-level remainder identity and equivalent decomposition are machine-checked in Lean in [PR #2](https://github.com/RFT-SIRM/RFT-Cosmology-Genesis/pull/2); the limit operator itself is not yet formalized in Lean.
 
 ## Phenomenological coupling
 
