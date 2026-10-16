@@ -92,8 +92,8 @@ This consequence follows only from the stated definition of \(q_m\); it does not
 
 - The proof above is an exact algebraic derivation from the repository's stated invariant.
 - The Python tests check representative finite levels and angles; tests are computational checks, not a substitute for the displayed proof.
-- The exact finite-level remainder identity and equivalent decomposition are formalized in Lean in `formalization/lean/CosmologyGenesis.lean` and are included in `main` via [PR #2](https://github.com/RFT-SIRM/RFT-Cosmology-Genesis/pull/2). A separate Lean convergence theorem is being proposed; until its CI passes, the convergence formalization should be treated as pending review.
-- The Lean file on `main` proves the algebraic remainder identity and exact decomposition. The new convergence theorem is under review separately and is not yet considered verified until its Lean build passes. Neither result establishes any physical cosmology claim.
+- The exact finite-level remainder identity and equivalent decomposition are formalized in Lean in `formalization/lean/CosmologyGenesis.lean` and are included in `main` via [PR #2](https://github.com/RFT-SIRM/RFT-Cosmology-Genesis/pull/2). A separate Lean convergence theorem is proposed in [PR #3](https://github.com/RFT-SIRM/RFT-Cosmology-Genesis/pull/3); its Lean build passes on the current PR head (`bca050c`), but it is not yet included in `main`.
+- The Lean file on `main` proves the algebraic remainder identity and exact decomposition. The new convergence theorem compiles on the current PR #3 head but remains pending review and merge; it has not yet entered `main`. Neither result establishes any physical cosmology claim.
 - The result is not a theorem about the observed CMB, dark matter, dark energy, or a physical interaction. Those claims require independent model derivation and observational testing.
 - The document records the mathematical claim and its scope; it does not itself establish legal novelty, patentability, priority, or ownership. The repository's Apache-2.0 license remains applicable to material covered by it.
 

@@ -15,7 +15,7 @@ The repository records a reduced phenomenological construction and its reproduci
 
 ### Exact mathematical statement added
 
-The analytic limit and exact finite-level remainder are stated and proved in [EXACT_INVARIANT_REMAINDER_THEOREM.md](EXACT_INVARIANT_REMAINDER_THEOREM.md). The six-test Python suite passes on `main`. The finite-level remainder identity and equivalent decomposition are machine-checked in Lean and merged via [PR #2](https://github.com/RFT-SIRM/RFT-Cosmology-Genesis/pull/2). A Lean theorem for convergence to the stated limit is proposed in a separate PR and remains pending until its build succeeds.
+The analytic limit and exact finite-level remainder are stated and proved in [EXACT_INVARIANT_REMAINDER_THEOREM.md](EXACT_INVARIANT_REMAINDER_THEOREM.md). The six-test Python suite passes on `main`. The finite-level remainder identity and equivalent decomposition are machine-checked in Lean and merged via [PR #2](https://github.com/RFT-SIRM/RFT-Cosmology-Genesis/pull/2). The Lean convergence theorem is proposed in [PR #3](https://github.com/RFT-SIRM/RFT-Cosmology-Genesis/pull/3), and its Lean build plus Python CI pass on the current PR head (`bca050c`). It remains unmerged pending review.
 
 ### Not established
 
