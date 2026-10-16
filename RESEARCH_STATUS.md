@@ -13,6 +13,10 @@ The repository records a reduced phenomenological construction and its reproduci
 - the cosmological response functions are implemented;
 - automated tests pass.
 
+### Exact mathematical statement added
+
+The analytic limit and exact finite-level remainder are now stated and proved in [EXACT_INVARIANT_REMAINDER_THEOREM.md](EXACT_INVARIANT_REMAINDER_THEOREM.md). Python regression tests were added for representative levels and angles. This statement is **not** represented as Lean-formalized; machine verification would require a separate Lean development and successful build.
+
 ### Not established
 
 The repository does not establish observational agreement with the CMB or a physical cosmological interaction.
