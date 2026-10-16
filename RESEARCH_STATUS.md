@@ -11,7 +11,7 @@ The repository records a reduced phenomenological construction and its reproduci
 - the finite-level remainder is tested;
 - the phenomenological coupling is tested;
 - the cosmological response functions are implemented;
-- automated tests pass.
+- the previously committed test suite was recorded as passing; the new regression tests are awaiting CI confirmation;
 
 ### Exact mathematical statement added
 
