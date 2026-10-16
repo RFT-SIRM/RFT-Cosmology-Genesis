@@ -11,11 +11,11 @@ The repository records a reduced phenomenological construction and its reproduci
 - the finite-level remainder is tested;
 - the phenomenological coupling is tested;
 - the cosmological response functions are implemented;
-- the current theorem branch's six-test Python suite passes in GitHub Actions;
+- the six-test Python suite passes in GitHub Actions on `main`;
 
 ### Exact mathematical statement added
 
-The analytic limit and exact finite-level remainder are stated and proved in [EXACT_INVARIANT_REMAINDER_THEOREM.md](EXACT_INVARIANT_REMAINDER_THEOREM.md). The six-test Python suite passes on this branch. The finite-level remainder identity and equivalent decomposition are machine-checked in Lean on [PR #2](https://github.com/RFT-SIRM/RFT-Cosmology-Genesis/pull/2); the limit operator itself is not yet formalized in Lean.
+The analytic limit and exact finite-level remainder are stated and proved in [EXACT_INVARIANT_REMAINDER_THEOREM.md](EXACT_INVARIANT_REMAINDER_THEOREM.md). The six-test Python suite passes on `main`. The finite-level remainder identity and equivalent decomposition are machine-checked in Lean and merged via [PR #2](https://github.com/RFT-SIRM/RFT-Cosmology-Genesis/pull/2). The Lean convergence theorem is proposed in [PR #3](https://github.com/RFT-SIRM/RFT-Cosmology-Genesis/pull/3), and its Lean build and Python CI passed on theorem-code commit (`bca050c`); the subsequent documentation-only commit leaves the Lean source unchanged. It remains unmerged pending review.
 
 ### Not established
 
