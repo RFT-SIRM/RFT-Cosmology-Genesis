@@ -30,4 +30,4 @@ jobs:
           lake exe cache get
       - name: Build theorem
         working-directory: formalization/lean
-        run: lake build
+        run: lake build CosmologyGenesis
