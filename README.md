@@ -36,7 +36,7 @@ Implementation: [`src/model.py`](./src/model.py), [`src/cosmology.py`](./src/cos
 
 [![Exact remainder theorem](https://img.shields.io/badge/theorem-exact%20finite--level%20remainder-0f766e?style=for-the-badge)](./EXACT_INVARIANT_REMAINDER_THEOREM.md)
 
-The invariant has an exact algebraic limit and finite-level remainder. The derivation, assumptions, and scope are documented in [Exact Invariant Remainder Theorem](./EXACT_INVARIANT_REMAINDER_THEOREM.md). This is an analytic theorem about the defined formula; it is **not** a claim of a machine-checked Lean proof or an observationally established cosmological law.
+The invariant has an exact algebraic limit and finite-level remainder. The derivation, assumptions, and scope are documented in [Exact Invariant Remainder Theorem](./EXACT_INVARIANT_REMAINDER_THEOREM.md). The finite-level remainder identity and equivalent decomposition are machine-checked in Lean on [PR #2](https://github.com/RFT-SIRM/RFT-Cosmology-Genesis/pull/2); the limit operator itself is not yet formalized in Lean. No observationally established cosmological law is claimed.
 
 ## Scientific status
 
@@ -59,7 +59,7 @@ Reference numerical agreement on control $\theta_*$: approximately $2.9\times10^
     pip install -r requirements.txt
     python -m pytest -q
 
-Previously recorded baseline: 4 passed. Two theorem-regression tests have been added on this branch; the new total awaits CI confirmation.
+Current branch CI result: **6 passed**.
 
 ## Related repositories
 
