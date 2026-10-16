@@ -92,7 +92,8 @@ This consequence follows only from the stated definition of \(q_m\); it does not
 
 - The proof above is an exact algebraic derivation from the repository's stated invariant.
 - The Python tests check representative finite levels and angles; tests are computational checks, not a substitute for the displayed proof.
-- This repository does **not** yet contain a Lean formalization of this theorem. It must not be described as machine-verified until such a formalization is added and its build passes.
+- A Lean formalization of the exact finite-level remainder identity and equivalent decomposition is available in [PR #2](https://github.com/RFT-SIRM/RFT-Cosmology-Genesis/pull/2), in `formalization/lean/CosmologyGenesis.lean`. GitHub Actions successfully built the `CosmologyGenesis` target on that branch. PR #2 remains open and unmerged, so the formalization is proposed and machine-checked in its PR branch, not yet part of `main`.
+- The Lean file proves the algebraic remainder identity and exact decomposition. It does not yet formalize the limit operator itself or establish any physical cosmology claim.
 - The result is not a theorem about the observed CMB, dark matter, dark energy, or a physical interaction. Those claims require independent model derivation and observational testing.
 - The document records the mathematical claim and its scope; it does not itself establish legal novelty, patentability, priority, or ownership. The repository's Apache-2.0 license remains applicable to material covered by it.
 
