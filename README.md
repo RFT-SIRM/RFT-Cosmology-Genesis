@@ -58,7 +58,7 @@ Reference numerical agreement on control $\theta_*$: approximately $2.9\times10^
     pip install -r requirements.txt
     python -m pytest -q
 
-Expected: 4 passed.
+Previously recorded baseline: 4 passed. Two theorem-regression tests have been added on this branch; the new total awaits CI confirmation.
 
 ## Related repositories
 
