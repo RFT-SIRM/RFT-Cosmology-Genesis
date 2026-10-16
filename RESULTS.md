@@ -2,7 +2,7 @@
 
 ## Reproducible computational results
 
-The last committed baseline recorded four passing tests. This branch adds two regression-test functions for the exact remainder theorem; the updated suite is awaiting CI confirmation.
+GitHub Actions reports **6 passed** on this branch, including two regression-test functions for the exact remainder theorem.
 
 Reference checks include:
 
@@ -13,7 +13,7 @@ Reference checks include:
 
 ## Exact invariant theorem
 
-The repository now documents an analytic derivation of the limit \(I_\infty(\theta)=-\frac{16}{9}\sin^2(\theta/2)\) and exact remainder \(I_m-I_\infty=-\frac{32}{9(3^m+1)}\sin^2(\theta/2)\). Python tests cover representative finite levels and angles. These tests are computational checks; no Lean formalization is claimed.
+The repository now documents an analytic derivation of the limit \(I_\infty(\theta)=-\frac{16}{9}\sin^2(\theta/2)\) and exact remainder \(I_m-I_\infty=-\frac{32}{9(3^m+1)}\sin^2(\theta/2)\). GitHub Actions reports six passing Python tests. The finite-level remainder identity and equivalent decomposition are machine-checked in Lean on [PR #2](https://github.com/RFT-SIRM/RFT-Cosmology-Genesis/pull/2); the limit operator itself is not yet formalized in Lean.
 
 ## Interpretation
 
