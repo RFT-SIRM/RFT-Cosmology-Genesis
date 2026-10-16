@@ -41,3 +41,40 @@ theorem rftInvariant_exact_decomposition
         - (32 / (9 * ((3 : ℝ) ^ m + 1))) * Real.sin (θ / 2) ^ 2 := by
   have h := rftInvariant_remainder m hm θ
   linarith
+
+/-- The finite-level invariant converges to its exact algebraic limit.
+We index levels by m + 1 so every term uses a positive level without
+natural-number subtraction. This is a mathematical limit of the defined
+formula, not a physical or observational claim. -/
+theorem rftInvariant_tendsto (θ : ℝ) :
+    Tendsto (fun m : ℕ => rftInvariant (m + 1) θ) atTop
+      (nhds (-(16 / 9) * Real.sin (θ / 2) ^ 2)) := by
+  have hpow : Tendsto (fun m : ℕ => (3 : ℝ) ^ m) atTop atTop :=
+    tendsto_pow_atTop_atTop_of_one_lt (by norm_num : (1 : ℝ) < 3)
+  have hshift : Tendsto (fun m : ℕ => m + 1) atTop atTop :=
+    tendsto_atTop_add_const_right _ 1 tendsto_id
+  have hpowShift : Tendsto (fun m : ℕ => (3 : ℝ) ^ (m + 1)) atTop atTop :=
+    hpow.comp hshift
+  have hdenAdd : Tendsto (fun m : ℕ => (3 : ℝ) ^ (m + 1) + 1) atTop atTop :=
+    tendsto_atTop_add_const_right _ 1 hpowShift
+  have hden : Tendsto (fun m : ℕ => 9 * ((3 : ℝ) ^ (m + 1) + 1)) atTop atTop :=
+    hdenAdd.const_mul_atTop (by norm_num : (0 : ℝ) < 9)
+  have hcoef : Tendsto
+      (fun m : ℕ => -(32 : ℝ) / (9 * ((3 : ℝ) ^ (m + 1) + 1)))
+      atTop (nhds 0) := by
+    simpa [div_eq_mul_inv, mul_comm] using
+      (tendsto_const_nhds (x := (-32 : ℝ))).mul
+        (tendsto_inv_atTop_zero.comp hden)
+  let s : ℝ := Real.sin (θ / 2) ^ 2
+  have hrem : Tendsto
+      (fun m : ℕ => (-(32 : ℝ) / (9 * ((3 : ℝ) ^ (m + 1) + 1))) * s)
+      atTop (nhds 0) := by
+    simpa using hcoef.mul (tendsto_const_nhds (x := s))
+  have hdecomp : (fun m : ℕ => rftInvariant (m + 1) θ) =
+      fun m => (-(16 / 9) * s) +
+        (-(32 : ℝ) / (9 * ((3 : ℝ) ^ (m + 1) + 1))) * s := by
+    funext m
+    simpa [s, sub_eq_add_neg] using
+      rftInvariant_exact_decomposition (m + 1) (by omega) θ
+  rw [hdecomp]
+  simpa [s] using (tendsto_const_nhds (x := -(16 / 9) * s)).add hrem
