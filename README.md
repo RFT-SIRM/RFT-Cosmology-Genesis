@@ -42,7 +42,8 @@ The invariant has an exact algebraic limit and finite-level remainder. The deriv
 
 | Layer | Location |
 |-------|----------|
-| Mathematical input | [`src/model.py`](./src/model.py) |\n| Exact invariant theorem | [`EXACT_INVARIANT_REMAINDER_THEOREM.md`](./EXACT_INVARIANT_REMAINDER_THEOREM.md) |
+| Mathematical input | [`src/model.py`](./src/model.py) |
+| Exact invariant theorem | [`EXACT_INVARIANT_REMAINDER_THEOREM.md`](./EXACT_INVARIANT_REMAINDER_THEOREM.md) |
 | Phenomenological assumptions | [`MODEL_SPEC.md`](./MODEL_SPEC.md) |
 | Numerical implementation | [`src/cosmology.py`](./src/cosmology.py) |
 | Reference results | [`RESULTS.md`](./RESULTS.md) |
