@@ -1,0 +1,33 @@
+name: Lean formalization
+
+on:
+  pull_request:
+    paths:
+      - "formalization/lean/**"
+      - ".github/workflows/lean-formalization.yml"
+  push:
+    branches:
+      - main
+      - "formalization/**"
+    paths:
+      - "formalization/lean/**"
+      - ".github/workflows/lean-formalization.yml"
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install elan
+        run: |
+          curl --proto '=https' --tlsv1.2 -sSf https://raw.githubusercontent.com/leanprover/elan/master/elan-init.sh | sh -s -- -y --default-toolchain none
+          echo "$HOME/.elan/bin" >> "$GITHUB_PATH"
+      - name: Install Lean toolchain and dependencies
+        working-directory: formalization/lean
+        run: |
+          elan toolchain install "$(cat lean-toolchain)"
+          lake update
+          lake exe cache get
+      - name: Build theorem
+        working-directory: formalization/lean
+        run: lake build CosmologyGenesis
