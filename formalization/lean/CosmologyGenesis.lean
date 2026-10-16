@@ -1,5 +1,7 @@
 import Mathlib
 
+open Filter
+
 /-!
 # Cosmology-Genesis: exact invariant remainder
 
@@ -74,7 +76,8 @@ theorem rftInvariant_tendsto (θ : ℝ) :
       fun m => (-(16 / 9) * s) +
         (-(32 : ℝ) / (9 * ((3 : ℝ) ^ (m + 1) + 1))) * s := by
     funext m
-    simpa [s, sub_eq_add_neg] using
-      rftInvariant_exact_decomposition (m + 1) (by omega) θ
+    rw [rftInvariant_exact_decomposition (m + 1) (by omega) θ]
+    dsimp [s]
+    ring
   rw [hdecomp]
   simpa [s] using (tendsto_const_nhds (x := -(16 / 9) * s)).add hrem
