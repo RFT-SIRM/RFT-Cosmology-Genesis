@@ -44,6 +44,8 @@ theorem rftInvariant_exact_decomposition
   have h := rftInvariant_remainder m hm θ
   linarith
 
+set_option maxHeartbeats 1000000
+
 /-- The finite-level invariant converges to its exact algebraic limit.
 We index levels by m + 1 so every term uses a positive level without
 natural-number subtraction. This is a mathematical limit of the defined
@@ -81,3 +83,5 @@ theorem rftInvariant_tendsto (θ : ℝ) :
     ring
   rw [hdecomp]
   simpa [s] using (tendsto_const_nhds (x := -(16 / 9) * s)).add hrem
+
+set_option maxHeartbeats 200000
