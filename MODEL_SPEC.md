@@ -22,6 +22,24 @@ $$
 I_m+\frac{8}{9}=-\frac{16}{9(3^m+1)}.
 $$
 
+## Exact limit and finite-level remainder
+
+For every integer \(m\geq1\) and real \(\theta\), the invariant defined above satisfies
+
+\[
+I_\infty(\theta):=\lim_{m\to\infty} I_m(\theta)
+=-\frac{16}{9}\sin^2\!\left(\frac{\theta}{2}\right),
+\]
+
+and the exact remainder identity
+
+\[
+I_m(\theta)-I_\infty(\theta)
+=-\frac{32}{9(3^m+1)}\sin^2\!\left(\frac{\theta}{2}\right).
+\]
+
+At \(\theta=\pi/2\), this reduces to the special case already recorded above. A derivation is given in [Exact Invariant Remainder Theorem](EXACT_INVARIANT_REMAINDER_THEOREM.md). The finite-level remainder identity and equivalent decomposition are machine-checked in Lean in [PR #2](https://github.com/RFT-SIRM/RFT-Cosmology-Genesis/pull/2); the limit operator itself is not yet formalized in Lean.
+
 ## Phenomenological coupling
 
 $$
