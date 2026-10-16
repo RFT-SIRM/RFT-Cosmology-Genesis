@@ -6,7 +6,7 @@
 
 ## Statement
 
-For every integer (m\geq1) and real angle \(\theta\), define
+For every integer \(m\geq1\) and real angle \(\theta\), define
 
 \[
 I_m(\theta)=-16\frac{3^{m-1}+1}{3^{m+1}+3}
