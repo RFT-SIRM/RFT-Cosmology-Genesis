@@ -55,10 +55,9 @@ theorem rftInvariant_tendsto (θ : ℝ) :
       (nhds (-(16 / 9) * Real.sin (θ / 2) ^ 2)) := by
   have hpow : Tendsto (fun m : ℕ => (3 : ℝ) ^ m) atTop atTop :=
     tendsto_pow_atTop_atTop_of_one_lt (by norm_num : (1 : ℝ) < 3)
-  have hshift : Tendsto (fun m : ℕ => m + 1) atTop atTop :=
-    tendsto_atTop_add_const_right _ 1 tendsto_id
-  have hpowShift : Tendsto (fun m : ℕ => (3 : ℝ) ^ (m + 1)) atTop atTop :=
-    hpow.comp hshift
+  have hpowShift : Tendsto (fun m : ℕ => (3 : ℝ) ^ (m + 1)) atTop atTop := by
+    simpa only [pow_succ, mul_comm] using
+      hpow.const_mul_atTop (by norm_num : (0 : ℝ) < 3)
   have hdenAdd : Tendsto (fun m : ℕ => (3 : ℝ) ^ (m + 1) + 1) atTop atTop :=
     tendsto_atTop_add_const_right _ 1 hpowShift
   have hden : Tendsto (fun m : ℕ => 9 * ((3 : ℝ) ^ (m + 1) + 1)) atTop atTop :=
