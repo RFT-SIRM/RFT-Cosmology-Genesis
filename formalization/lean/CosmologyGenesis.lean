@@ -8,7 +8,7 @@ Python model. It does not formalize a physical interaction or observational
 claim. The index is assumed positive because the source formula uses m - 1.
 -/
 
-def rftInvariant (m : ℕ) (θ : ℝ) : ℝ :=
+noncomputable def rftInvariant (m : ℕ) (θ : ℝ) : ℝ :=
   -16 * (((3 : ℝ) ^ (m - 1) + 1) / ((3 : ℝ) ^ (m + 1) + 3)) *
     Real.sin (θ / 2) ^ 2
 
@@ -32,7 +32,7 @@ theorem rftInvariant_remainder
   unfold rftInvariant
   rw [hnum, hden]
   field_simp [hnonzero]
-  <;> ring
+  ring
 
 theorem rftInvariant_exact_decomposition
     (m : ℕ) (hm : 1 ≤ m) (θ : ℝ) :
