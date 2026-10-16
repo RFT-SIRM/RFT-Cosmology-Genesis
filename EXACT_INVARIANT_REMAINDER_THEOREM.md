@@ -8,58 +8,58 @@
 
 For every integer $m\geq1$ and real angle $\theta$, define
 
-$
+$$
 I_m(\theta)=-16\frac{3^{m-1}+1}{3^{m+1}+3}
 \sin^2\!\left(\frac{\theta}{2}\right).
-$
+$$
 
 Then the exact finite-level remainder relative to its limit is
 
-$
+$$
 \boxed{
 I_m(\theta)-I_\infty(\theta)
 =-\frac{32}{9(3^m+1)}
 \sin^2\!\left(\frac{\theta}{2}\right)
 }
-$
+$$
 
 where
 
-$
+$$
 \boxed{
 I_\infty(\theta):=\lim_{m\to\infty}I_m(\theta)
 =-\frac{16}{9}\sin^2\!\left(\frac{\theta}{2}\right).
 }
-$
+$$
 
 In particular, at $\theta=\pi/2$,
 
-$
+$$
 I_\infty(\pi/2)=-\frac89,
 \qquad
 I_m(\pi/2)+\frac89=-\frac{16}{9(3^m+1)}.
-$
+$$
 
 ## Proof
 
 Write $s^2=\sin^2(\theta/2)$. Since
 
-$
+$$
 3^{m-1}+1=\frac{3^m+3}{3},
 \qquad
 3^{m+1}+3=3(3^m+1),
-$
+$$
 
 the defining expression becomes
 
-$
+$$
 \begin{aligned}
 I_m(\theta)
 &=-\frac{16(3^m+3)}{9(3^m+1)}s^2\\
 &=-\frac{16}{9}\left(1+\frac{2}{3^m+1}\right)s^2\\
 &=-\frac{16}{9}s^2-\frac{32}{9(3^m+1)}s^2.
 \end{aligned}
-$
+$$
 
 Because $3^m+1\to\infty$, the second term tends to zero. This proves the limit and the exact remainder identity. Substituting $\sin^2(\pi/4)=1/2$ gives the stated special case. $\square$
 
@@ -67,24 +67,24 @@ Because $3^m+1\to\infty$, the second term tends to zero. This proves the limit a
 
 For a fixed finite parameter $\epsilon$, define
 
-$
+$$
 q_m(\theta)=1+\epsilon I_m(\theta).
-$
+$$
 
 The algebraic limit is therefore
 
-$
+$$
 q_\infty(\theta)=1-\frac{16\epsilon}{9}
 \sin^2\!\left(\frac{\theta}{2}\right),
-$
+$$
 
 and its finite-level remainder is
 
-$
+$$
 q_m(\theta)-q_\infty(\theta)
 =-\frac{32\epsilon}{9(3^m+1)}
 \sin^2\!\left(\frac{\theta}{2}\right).
-$
+$$
 
 This consequence follows only from the stated definition of $q_m$; it does not establish a physical origin for $\epsilon$.
 
