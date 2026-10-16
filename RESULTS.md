@@ -2,7 +2,7 @@
 
 ## Reproducible computational results
 
-The current implementation passes the automated reference tests.
+The last committed baseline recorded four passing tests. This branch adds two regression-test functions for the exact remainder theorem; the updated suite is awaiting CI confirmation.
 
 Reference checks include:
 
@@ -10,10 +10,6 @@ Reference checks include:
 - asymptotic limit \(I_\infty=-8/9\);
 - finite-level remainder;
 - coupling definition.
-
-Current local test result:
-
-`4 passed`.
 
 ## Exact invariant theorem
 
