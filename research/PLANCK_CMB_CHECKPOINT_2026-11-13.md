@@ -733,3 +733,92 @@ The branch had previously been verified as one commit ahead of remote `main`, ze
 `739cff9d474913d00f5519b5e16d3ef592f9de57`
 
 Only the checkpoint Markdown file is to be updated in this documentation commit. Do not merge the branch into `main`. PR #6 remains separate. Verify the branch comparison again after committing.
+
+---
+
+## 14.11. Session update — extended zero-CDM direct scans (2026-11-13, late session)
+
+This section supersedes the "Current best observed zero-CDM candidate" in Section 14.4. Earlier scan rows and optimizer failures remain historical records; they are not deleted.
+
+### Evaluation protocol
+
+The subsequent calculations continued with the same matched accuracy-0 model:
+
+- `omch2 = 0.0` (fixed).
+- `lens_potential_accuracy = 0`.
+- Likelihoods: low-ℓ TT, low-ℓ EE, native Plik-lite TTTEEE, and native Planck lensing.
+- Direct calls used `make_finite=False` and `cached=False`.
+- A point was accepted only if `logpost` and all four named likelihood contributions were finite.
+- Points returning `-inf`, NaN, incomplete likelihood dictionaries, or exceptions were not ranked.
+
+The recurring Cobaya warning that direct `get_model` evaluation ignores the `output` and `sampler` blocks is expected for these direct likelihood probes; the model theory and likelihood blocks were loaded.
+
+### New best observed conditional grid point
+
+The latest refinement varied `ombh2`, `As`, and `ns` on a (3\times3\times3) grid, holding the other parameters fixed. All 27/27 points had finite posterior and all four likelihoods.
+
+| Parameter | Value |
+|---|---:|
+| (H_0) | 100.0 (upper prior boundary) |
+| (Omega_bh^2) | 0.01885 |
+| (Omega_ch^2) | 0 (fixed) |
+| (A_s) | (0.990\times10^{-9}) |
+| (n_s) | 1.026 |
+| (	au) | 0.24195 |
+| (A_{\rm planck}) | 1.0008 |
+
+- `minuslogpost = 71202.824908506`
+- `chi2__CMB = 142454.950997361`
+
+Likelihood contributions:
+
+| Component | (chi^2) |
+|---|---:|
+| Planck low-(ell) TT | 175.662245 |
+| Planck low-(ell) EE | 435.067184 |
+| Native Plik-lite TTTEEE | 132375.342744 |
+| Planck lensing native | 9468.878824 |
+| **Total** | **142454.950997361** |
+
+Within this 27-point grid, the five best points were:
+
+| (Omega_bh^2) | (A_s/10^{-9}) | (n_s) | (-\log P) | (chi^2_{\rm CMB}) |
+|---:|---:|---:|---:|---:|
+| 0.01885 | 0.9900 | 1.02600 | 71202.824909 | 142454.950997 |
+| 0.01875 | 0.9900 | 1.02600 | 71203.559371 | 142456.419922 |
+| 0.01880 | 0.9900 | 1.02600 | 71203.622560 | 142456.546300 |
+| 0.01885 | 0.9925 | 1.02600 | 71210.947472 | 142471.196125 |
+| 0.01880 | 0.9925 | 1.02600 | 71212.217464 | 142473.736108 |
+
+Relative to the previous best from the immediately preceding 27-point grid ((-\log P=71213.302120083), (chi^2=142475.905420515)), the improvement is 10.477211577 in (-\log P) and 20.954423154 in (chi^2).
+
+This is a best observed conditional grid point, **not** a jointly optimized fit and not a global minimum. It remains at the (H_0) prior boundary and uses extreme (n_s) and (	au). The large Plik-lite contribution still dominates the total. The numerical ratio to the matched Lambda-CDM control is only a raw diagnostic contrast; it is not a calibrated exclusion significance because the zero-CDM point is not an optimized fit and the control/zero-CDM minima are not on equal footing.
+
+### Other late-session scans that did not beat the new candidate
+
+1. A (7\times5) ((\tau,A_{\rm planck})) frontier scan at fixed (H_0=100), (Omega_bh^2=0.019), (A_s=0.9875\times10^{-9}), (n_s=1.025) had 27/35 finite points in its first fine grid and 23/36 finite points in the subsequent finer grid. Its best point was (	au=0.24195), (A_{\rm planck}=1.0008), with (-\log P=71237.170675129) and (chi^2=142523.642530607). It does not beat the 71202.8249 candidate because the fixed (A_s,n_s,Omega_bh^2) context differs.
+2. A (3\times3\times3) scan of (Omega_bh^2,A_s,n_s), with (H_0=100), (	au=0.24195), (A_{\rm planck}=1.0008), produced 27/27 finite points and the new best candidate above.
+3. The raw stdout of that 27-point scan was saved outside the repository at `~/Downloads/RFT-Planck-Runs/matched_accuracy0_20261113_195423/zero_cdm_grid_refinement_02.log` (77 lines, approximately 3.9 KB at the time of inspection). The repository checkpoint records the summary; the external log remains the detailed local terminal artifact.
+
+### Updated optimizer status
+
+No optimizer has yet returned a valid zero-CDM minimum:
+
+- BOBYQA: failed (singular interpolation system / invalid domain probes).
+- SciPy Powell: apparent termination at the maximum floating-point sentinel, then Cobaya's independent re-evaluation returned (-\infty); failed.
+- iminuit 2.33.0 / MIGRAD: initialization succeeded and its initial objective was finite, but the first update generated NaN values for all six sampled parameters; failed.
+
+The MIGRAD failure mechanism is still **unresolved**. Parameter-bound transformations, affine scaling, treatment of invalid likelihood points, and the unbounded Gaussian (A_{\rm planck}) prior are diagnostic hypotheses only; none has yet been established as the cause.
+
+### Next actions from this point
+
+1. Synchronize the local checkout with the current remote checkpoint branch before making further local changes. The local checkout previously reported `e8845cc`, while the remote branch has since advanced to `996d308`; do a fetch and a fast-forward-only update after checking the worktree is clean.
+2. Reproduce the new best grid point twice in fresh direct model instances with `make_finite=False,cached=False`, and save the full per-likelihood results.
+3. Inspect the exact installed Cobaya 3.6.2 source for `affine_transform`, `inv_affine_transform`, `minuslogp_transf`, transformed bounds, and the call into iminuit. Record the source line numbers and code before proposing a change.
+4. Probe the objective in the same transformed coordinates used by Cobaya, first at the candidate and then at small positive/negative coordinate displacements. Check both finite and invalid-domain evaluations.
+5. Do not replace invalid likelihood values with the maximum-float sentinel. Use a finite, documented barrier/penalty only if it preserves the feasible-region objective and is validated against the raw likelihood; alternatively constrain the trial region so invalid proposals are never generated.
+6. Only after those tests, run one bounded/staged optimizer configuration under a fresh output prefix. A staged fit must be labeled conditional if any parameters are fixed.
+7. Directly re-evaluate any candidate minimum, check independent-start reproducibility, then expand the scientific comparison to matched higher theory accuracy, full Plik if available, spectra residuals, and independent data. No dark-matter exclusion claim is supported at this stage.
+
+The current scientific status remains exploratory: the best observed zero-CDM grid point is not a global best fit, and no statistically calibrated model exclusion has been established.
+
