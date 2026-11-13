@@ -2,55 +2,64 @@
 
 [![CI](https://img.shields.io/github/actions/workflow/status/RFT-SIRM/RFT-Cosmology-Genesis/ci.yml?branch=main&style=for-the-badge&label=CI)](https://github.com/RFT-SIRM/RFT-Cosmology-Genesis/actions/workflows/ci.yml)
 [![Status](https://img.shields.io/badge/status-phenomenological%20baseline-2563eb?style=for-the-badge)](./RESEARCH_STATUS.md)
-[![Reproducibility](https://img.shields.io/badge/reproducibility-locked-16a34a?style=for-the-badge)](./RESULTS.md)
+[![Reproducibility](https://img.shields.io/badge/reproducibility-tracked-0f766e?style=for-the-badge)](./RESULTS.md)
 [![License](https://img.shields.io/badge/license-Apache%202.0-ea580c?style=for-the-badge)](./LICENSE)
 [![Python](https://img.shields.io/badge/python-3.11-3776AB?style=for-the-badge&logo=python&logoColor=white)](https://www.python.org)
 
 ## Purpose
 
-`RFT-Cosmology-Genesis` records a reproducible **Pass-1 phenomenological** calculation that maps the intensive spectral invariant from the RFT mathematical line into an explicit photon-sector coupling ansatz and evaluates its **background / geometric** CMB response.
+RFT-Cosmology-Genesis records a reproducible **Pass-1 phenomenological** calculation that maps the intensive spectral invariant from the RFT mathematical line into an explicit photon-sector coupling ansatz and evaluates a reduced **background / acoustic-scale** response.
 
-**This repository does not claim that the coupling is a physical cosmological interaction or that it explains the observed CMB.**
+**This repository does not claim that the coupling is a physical cosmological interaction or that it explains the observed CMB.** It does not yet calculate a full TT/TE/EE spectrum or evaluate an observational likelihood.
 
 ## Mathematical input
 
 $$
-I_m(\theta)=-16\frac{3^{m-1}+1}{3^{m+1}+3}\sin^2\!\left(\frac{\theta}{2}\right).
+I_m(\theta)=-16\frac{3^{m-1}+1}{3^{m+1}+3}
+\sin^2\!\left(\frac{\theta}{2}\right).
 $$
 
-At $\theta=\pi/2$:
+At $\theta=\pi/2$,
 
 $$
-I_\infty=-\frac{8}{9}.
+I_\infty=-\frac89.
 $$
 
 Pass-1 coupling:
 
 $$
-q_m=1+\epsilon\,I_m.
+q_m=1+\epsilon I_m.
 $$
 
-Implementation: [`src/model.py`](./src/model.py), [`src/cosmology.py`](./src/cosmology.py).
+Implementation: [src/model.py](./src/model.py), [src/cosmology.py](./src/cosmology.py).
 
 ## Mathematical theorem
 
 [![Exact remainder theorem](https://img.shields.io/badge/theorem-exact%20finite--level%20remainder-0f766e?style=for-the-badge)](./EXACT_INVARIANT_REMAINDER_THEOREM.md)
 
-The invariant has an exact algebraic limit and finite-level remainder. The derivation, assumptions, and scope are documented in [Exact Invariant Remainder Theorem](./EXACT_INVARIANT_REMAINDER_THEOREM.md). The finite-level remainder identity and equivalent decomposition are machine-checked in Lean and included in `main` via [PR #2](https://github.com/RFT-SIRM/RFT-Cosmology-Genesis/pull/2). A separate Lean convergence theorem is proposed in [PR #3](https://github.com/RFT-SIRM/RFT-Cosmology-Genesis/pull/3); its Lean build and Python CI passed on theorem-code commit (`bca050c`); a subsequent documentation-only commit leaves the Lean source unchanged. The PR remains unmerged pending review. No observationally established cosmological law is claimed.
+The exact H⁴ trace defect originates in [Evgeny's Theorem](https://github.com/RFT-SIRM/Evgeny-Theorem/blob/main/THEOREM.md) and is machine-checked upstream for every $m\geq1$ and real angle. This repository independently formalizes the resulting scalar invariant, its exact finite-level remainder, decomposition, and convergence in [CosmologyGenesis.lean](./formalization/lean/CosmologyGenesis.lean). The local Lean project does not import the upstream operator formalization. The finite-level identity and convergence theorem are both already merged in main; [PR #2](https://github.com/RFT-SIRM/RFT-Cosmology-Genesis/pull/2) and [PR #3](https://github.com/RFT-SIRM/RFT-Cosmology-Genesis/pull/3) are historical introduction points, not open work.
+
+## Spectral moment lineage
+
+The H⁶ and H⁸ results from Evgeny's Theorem now have reproducible normalized finite-level formulas, exact limits, and exact remainders in [src/spectral_moments.py](./src/spectral_moments.py). The H¹⁰ recurrence is also Lean-proved upstream, with its exact coefficient retained as a finite trace expression.
+
+[**Read the spectral moment dossier**](./SPECTRAL_MOMENT_DOSSIER.md)
+
+The dossier also distinguishes the separate scalar signed-Z₂ H¹⁰ programme and Schur-boundary spectral work in Phi-Genesis. These are not interchangeable with the noncommutative SU(2) moments. No higher-moment term has been added to the cosmological coupling.
 
 ## Scientific status
 
 | Layer | Location |
-|-------|----------|
-| Mathematical input | [`src/model.py`](./src/model.py) |
-| Exact invariant theorem | [`EXACT_INVARIANT_REMAINDER_THEOREM.md`](./EXACT_INVARIANT_REMAINDER_THEOREM.md) |
-| Phenomenological assumptions | [`MODEL_SPEC.md`](./MODEL_SPEC.md) |
-| Numerical implementation | [`src/cosmology.py`](./src/cosmology.py) |
-| Reference results | [`RESULTS.md`](./RESULTS.md) |
-| Limitations | [`LIMITATIONS.md`](./LIMITATIONS.md) |
-| Research status | [`RESEARCH_STATUS.md`](./RESEARCH_STATUS.md) |
-
-Reference numerical agreement on control $\theta_*$: approximately $2.9\times10^{-15}$ (prior analysis; preserved as reference).
+|---|---|
+| H⁴ mathematical input | [src/model.py](./src/model.py) |
+| Exact H⁴ theorem and remainder | [EXACT_INVARIANT_REMAINDER_THEOREM.md](./EXACT_INVARIANT_REMAINDER_THEOREM.md) |
+| H⁶/H⁸ normalized diagnostics | [src/spectral_moments.py](./src/spectral_moments.py) |
+| Cross-project proof boundaries | [SPECTRAL_MOMENT_DOSSIER.md](./SPECTRAL_MOMENT_DOSSIER.md) |
+| Phenomenological assumptions | [MODEL_SPEC.md](./MODEL_SPEC.md) |
+| Numerical implementation | [src/cosmology.py](./src/cosmology.py) |
+| Reproducible results | [RESULTS.md](./RESULTS.md) |
+| Limitations | [LIMITATIONS.md](./LIMITATIONS.md) |
+| Research status | [RESEARCH_STATUS.md](./RESEARCH_STATUS.md) |
 
 ## Reproduction
 
@@ -59,14 +68,15 @@ Reference numerical agreement on control $\theta_*$: approximately $2.9\times10^
     pip install -r requirements.txt
     python -m pytest -q
 
-Current branch CI result: **6 passed**.
+The Python CI workflow runs the complete pytest suite. The Lean workflow builds the scalar H⁴ formalization when Lean sources or its workflow change. See the latest [GitHub Actions runs](https://github.com/RFT-SIRM/RFT-Cosmology-Genesis/actions).
 
 ## Related repositories
 
 - [Evgeny-Theorem](https://github.com/RFT-SIRM/Evgeny-Theorem)
+- [Phi-Genesis](https://github.com/RFT-SIRM/Phi-Genesis)
 - [RFT-QPU-Sierpinski](https://github.com/RFT-SIRM/RFT-QPU-Sierpinski)
 - [RFT-Invariant-Battery.](https://github.com/RFT-SIRM/RFT-Invariant-Battery.)
 
 ## License
 
-Apache-2.0 — see [`LICENSE`](./LICENSE).
+Apache-2.0 — see [LICENSE](./LICENSE).
