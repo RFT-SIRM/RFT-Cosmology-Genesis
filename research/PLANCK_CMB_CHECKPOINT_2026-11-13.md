@@ -419,3 +419,317 @@ on fixed-parameter diagnostics.
 Keep the Planck research log separate from PR #6. The next repository
 change should remain documentation-first unless a reproducible code
 change is fully tested.
+
+
+---
+
+## 14. Session update — 2026-11-13 evening
+
+This section supersedes the immediate "first task" in Section 13. It records the additional matched-accuracy Planck runs performed after the initial checkpoint. All results below are exploratory. No zero-CDM global minimum has been obtained.
+
+### 14.1. Matched accuracy-0 Lambda-CDM control
+
+A separate pair of Cobaya configurations was generated from the prior reference configuration. The preparation script confirmed byte-for-byte equivalent shared priors after YAML normalization, identical four likelihood components, and `lens_potential_accuracy = 0` for both models.
+
+Run directory:
+
+`~/Downloads/RFT-Planck-Runs/matched_accuracy0_20261113_195423/`
+
+Configurations:
+
+- `lcdm_accuracy0.yaml`
+- `zero_cdm_accuracy0.yaml`
+- later optimizer experiments: `zero_cdm_accuracy0_powell.yaml`, `zero_cdm_accuracy0_iminuit.yaml`
+
+The Lambda control initialized and converged with Cobaya's BOBYQA minimizer:
+
+| Parameter | Value |
+|---|---:|
+| \(H_0\) | 67.378533 |
+| \(\Omega_bh^2\) | 0.022386 |
+| \(\Omega_ch^2\) | 0.119961 |
+| \(A_s\) | \(2.104359\times10^{-9}\) |
+| \(n_s\) | 0.964929 |
+| \(\tau\) | 0.055402 |
+| \(A_{\rm planck}\) | 1.000802 |
+
+- `minuslogpost = 481.302904`
+- `chi2__CMB = 1013.292676`
+
+Likelihood contributions:
+
+| Component | \(\chi^2\) |
+|---|---:|
+| Planck low-\(\ell\) TT | 23.371598 |
+| Planck low-\(\ell\) EE | 396.262456 |
+| Plik-lite TTTEEE native | 584.941497 |
+| Planck lensing native | 8.717125 |
+
+This is the matched accuracy-0 control, not a publication-quality final fit. The same low-accuracy theory choice must be kept in mind when interpreting all comparisons below.
+
+### 14.2. Explicit zero-CDM configuration
+
+The zero-CDM YAML was checked directly:
+
+`omch2 = 0.0`
+
+The sampled parameters are:
+
+`H0, ombh2, As, ns, tau, A_planck`
+
+The neutrino assumptions remain standard and fixed:
+
+- `mnu = 0.06 eV`
+- `nnu = 3.046`
+
+The common likelihood set remains:
+
+- `planck_2018_lowl.TT`
+- `planck_2018_lowl.EE`
+- `planck_2018_highl_plik.TTTEEE_lite_native`
+- `planck_2018_lensing.native`
+
+The high-\(\ell\) likelihood is **native Plik-lite**, not the full original Planck Plik likelihood with its full nuisance-parameter model. Full Plik installation had not succeeded in the initial environment setup.
+
+The CAMB setting remains:
+
+`lens_potential_accuracy = 0`
+
+This setting is deliberately matched between the Lambda-CDM and zero-CDM diagnostic runs. In the installed Cobaya/CAMB configuration, accuracy 0 also disables the nonlinear-source path previously observed at accuracy 1. It is not the final preferred theory accuracy for a publication-level result. Accuracy-1 zero-CDM runs have shown CAMB high-\(k\) extrapolation problems for some parameter points. Do not silently compare the two cosmologies using different theory settings.
+
+### 14.3. Important diagnostic correction: finite-point handling
+
+An early 16-point grid script used:
+
+`make_finite=True`
+
+Cobaya may replace non-finite likelihood/posterior values with finite penalty values in this mode. Therefore the early report "16/16 finite" is **not accepted as a raw-likelihood validity result**.
+
+The correction was to repeat selected points with:
+
+`make_finite=False`
+
+Seven selected points were then evaluated directly and returned finite posterior and all four finite likelihood contributions. Subsequent scans recorded below also used `make_finite=False` and explicitly checked all four likelihoods plus finite `logpost`.
+
+Do not reuse the earlier 16/16 statement as evidence that every point in that initial grid was a physically valid likelihood evaluation.
+
+### 14.4. Zero-CDM direct-scan history
+
+All rows below are **conditional grid/slice results**, not jointly optimized fits. Each scan fixed the parameters not explicitly varied. A best grid point is not a global minimum.
+
+| Scan | Varied parameters and fixed context | Raw finite points | Best point in that scan | \(\chi^2_{\rm CMB}\) |
+|---|---|---:|---|---:|
+| Initial raw spot checks | selected \(H_0,\Omega_bh^2\) points at the original Lambda-like \(A_s,n_s,\tau\) | 7/7 | multiple test points | see terminal record |
+| \(A_s\)-\(\tau\), coarse | \(H_0=99,\Omega_bh^2=0.039,n_s=0.964929,A_{\rm planck}=1.000802368\); \(6\times7\) grid | 23/42 | \(A_s=0.90\times10^{-9},\tau=0.16\) | 162,753.090 |
+| \(A_s\)-\(\tau\), refine 1 | same fixed context; \(5\times4\) grid | 18/20 | \(A_s=0.95\times10^{-9},\tau=0.18\) | 162,635.444 |
+| \(A_s\)-\(\tau\), refine 2 | same fixed context; \(5\times5\) grid | 25/25 | \(A_s=0.975\times10^{-9},\tau=0.19\) | 162,615.333 |
+| \(H_0,\Omega_bh^2,n_s\) | \(A_s=0.975\times10^{-9},\tau=0.19,A_{\rm planck}=1.000802368\); \(3^3\) grid | 24/27 | \(H_0=99,\Omega_bh^2=0.036,n_s=0.99\) | 157,410.839 |
+| Geometry/tilt coarse boundary | same fixed \(A_s,\tau,A_{\rm planck}\); \(H_0=98,99,99.8\), \(\Omega_bh^2=0.030,0.033,0.036\), \(n_s=0.99,1.04,1.09\) | 9/27 | \(H_0=99.8,\Omega_bh^2=0.030,n_s=0.99\) | 151,578.209 |
+| Geometry/tilt near high \(H_0\) | same fixed \(A_s,\tau,A_{\rm planck}\); \(H_0=99,99.5,99.9\), \(\Omega_bh^2=0.020,0.025,0.030\), \(n_s=0.98,0.99,1.00\) | 27/27 | \(H_0=99.9,\Omega_bh^2=0.025,n_s=1.00\) | 147,645.007 |
+| High-prior-edge scan | same fixed \(A_s,\tau,A_{\rm planck}\); \(H_0=99.5,99.9,99.99\), \(\Omega_bh^2=0.010,0.015,0.020,0.025\), \(n_s=1.00,1.02,1.04\) | 30/36 | \(H_0=99.99,\Omega_bh^2=0.020,n_s=1.02\) | 145,618.989 |
+| \(A_s\)-\(\tau\) at high \(H_0\) | \(H_0=99.99,\Omega_bh^2=0.020,n_s=1.02,A_{\rm planck}=1.000802368\); \(5\times5\) grid | 15/25 | \(A_s=0.95\times10^{-9},\tau=0.19\) | 144,312.649 |
+| \(A_s\)-\(\tau\), local refine | same fixed context; \(5\times5\) grid | 23/25 | \(A_s=0.9375\times10^{-9},\tau=0.205\) | 143,164.217 |
+| \(A_s\)-\(\tau\), next refine | same fixed context; \(5\times5\) grid | 17/25 | \(A_s=0.9625\times10^{-9},\tau=0.225\) | 143,039.393 |
+| \(A_s\)-\(\tau\), next refine | same fixed context; \(5\times5\) grid | 17/25 | \(A_s=0.9875\times10^{-9},\tau=0.24\) | 143,017.440 |
+| \(H_0,\Omega_bh^2\), posterior-focused | \(A_s=0.9875\times10^{-9},n_s=1.02,\tau=0.24,A_{\rm planck}=1.001302368\); \(3\times5\) grid | 15/15 | \(H_0=99.9999,\Omega_bh^2=0.019\) | **142,929.394** |
+
+Additional direct scans around \(A_s,\tau\) and \(n_s\) confirmed that the best points repeatedly lie close to the allowed upper boundary in \(H_0\), with elevated \(n_s\), high \(\tau\), and sub-Lambda values of \(A_s\). The grid outputs, rather than this summary table, remain the primary numerical record in the conversation.
+
+#### Current best observed zero-CDM candidate
+
+The best observed point by both likelihood \(\chi^2_{\rm CMB}\) and posterior among the supplied direct scans is the 15-point \(H_0,\Omega_bh^2\) scan:
+
+| Parameter | Value |
+|---|---:|
+| \(H_0\) | 99.9999 |
+| \(\Omega_bh^2\) | 0.019 |
+| \(\Omega_ch^2\) | 0 (fixed) |
+| \(A_s\) | \(0.9875\times10^{-9}\) |
+| \(n_s\) | 1.02 |
+| \(\tau\) | 0.240 |
+| \(A_{\rm planck}\) | 1.001302368 |
+| `minuslogpost` | 71,440.130664 |
+| `chi2__CMB` from the four likelihoods | **142,929.393522** |
+
+Likelihood contributions:
+
+| Component | \(\chi^2\) |
+|---|---:|
+| Planck low-\(\ell\) TT | 165.496742 |
+| Planck low-\(\ell\) EE | 435.096748 |
+| Plik-lite TTTEEE native | 132,870.966945 |
+| Planck lensing native | 9,457.833087 |
+| **Total** | **142,929.393522** |
+
+Plik-lite contributes about 92.96% of this total. The matched Lambda-CDM accuracy-0 control has \(\chi^2_{\rm CMB}=1013.292676\). The ratio of these two reported values is about 141.05, with a raw difference of about 141,916.10.
+
+**Interpretation limit:** this is a best *observed conditional grid point*, not an optimized zero-CDM fit or a global minimum. It lies essentially at the upper prior boundary \(H_0=100\), and its \(n_s=1.02\), \(\tau=0.24\) are extreme relative to the Lambda-CDM control. The ratio and difference are not a calibrated exclusion significance, and no \(p\)-value or sigma exclusion may be inferred from them. The Lambda-CDM candidate is optimized; the zero-CDM point is not. This is not a like-for-like comparison of two independently established global minima.
+
+### 14.5. Local parameter-displacement diagnostics
+
+At the base point
+
+- \(H_0=99.99\)
+- \(\Omega_bh^2=0.020\)
+- \(A_s=0.9875\times10^{-9}\)
+- \(n_s=1.02\)
+- \(\tau=0.240\)
+- \(A_{\rm planck}=1.000802368\)
+
+the direct evaluation gave:
+
+- `minuslogpost = 71484.069859`
+- `chi2__CMB = 143017.440290`
+
+One-parameter displacements (all other parameters fixed) showed:
+
+| Displacement | \(\Delta(-\log P)\) relative to base | Raw \(\chi^2_{\rm CMB}\) |
+|---|---:|---:|
+| \(H_0=99.8\) | +22.8255 | 143,063.091 |
+| \(H_0=99.9\) | +10.9841 | 143,039.408 |
+| \(\Omega_bh^2=0.019\) | -38.5783 | 142,940.284 |
+| \(\Omega_bh^2=0.021\) | invalid | — |
+| \(A_s=0.9625\times10^{-9}\) | invalid | — |
+| \(A_s=1.0125\times10^{-9}\) | +112.6180 | 143,242.676 |
+| \(n_s=1.01\) | +385.7683 | 143,788.977 |
+| \(n_s=1.03\) | invalid | — |
+| \(\tau=0.23\) | +78.0092 | 143,173.459 |
+| \(\tau=0.25\) | +39.4911 | 143,096.422 |
+| \(A_{\rm planck}=1.000302368\) | +1.0077 | 143,019.544 |
+| \(A_{\rm planck}=1.001302368\) | -0.6713 | 143,015.929 |
+
+This local displacement table was centered on the base point with \(A_{\rm planck}=1.000802368\); the later best-posterior scan used \(A_{\rm planck}=1.001302368\). Do not mix those two points.
+
+The later \(H_0,\Omega_bh^2\) scan kept \(A_s,n_s,\tau,A_{\rm planck}\) at the values listed for the current best candidate and ranked all 15 valid points by Cobaya posterior. It produced \(H_0=99.9999,\Omega_bh^2=0.019\) as the best of that scan.
+
+### 14.6. Optimizer attempts — no valid zero-CDM minimum yet
+
+#### BOBYQA
+
+The first zero-CDM BOBYQA run began from the Lambda-like point and failed after 13 evaluations:
+
+- one or more low-\(\ell\) EE proposals were rejected as out of range;
+- Py-BOBYQA reported exit flag \(-3\), singular interpolation linear system;
+- no reproducible minimum was produced.
+
+The printed `xmin = [0, 0, -1, 0, 0, 0]` is in the optimizer's internal transformed coordinates, not the physical cosmological parameters. The printed objective is not a valid minimum.
+
+#### SciPy Powell
+
+A separate `zero_cdm_accuracy0_powell.yaml` was created, starting from \(H_0=99,\Omega_bh^2=0.039\). Powell printed "Optimization terminated successfully", but the function value was the floating-point maximum (\(\sim1.79769\times10^{308}\)); many low-\(\ell\) EE points were rejected. Cobaya then recomputed the alleged minimum and obtained \(-\infty\), failing its reproducibility check. **This is a failed run, not a fit.**
+
+#### iminuit / MIGRAD
+
+Installed in the dedicated environment:
+
+- `iminuit 2.33.0`
+- installed by pip into `~/.venvs/rft-camb-2.0.5-py314`
+- no repository dependency files were modified.
+
+A separate `zero_cdm_accuracy0_iminuit.yaml` was created, starting at:
+
+- \(H_0=99.99,\Omega_bh^2=0.020,A_s=0.9875\times10^{-9},n_s=1.02,\tau=0.24,A_{\rm planck}=1.000802368\).
+
+Cobaya test initialization succeeded. MIGRAD computed a finite initial FCN of 71,484.06986, but during its first iteration Cobaya received NaN values for all six parameters and raised:
+
+`Got non-finite parameter values: H0, ombh2, As, ns, tau, A_planck = nan`
+
+No MIGRAD minimum was returned. This failure has not yet been diagnosed; do not label it as a physics result.
+
+### 14.7. Current working interpretation
+
+1. The standard-gravity, fixed-zero-CDM model can evaluate all four selected likelihoods at a substantial set of parameter points.
+2. The optimizer failures are numerical/domain/parameterization failures; none yields a valid zero-CDM minimum.
+3. Conditional grid search has reduced the fixed-point mismatch by more than an order of magnitude compared with the initial Lambda-like zero-CDM point. However, the best conditional point still has \(\chi^2_{\rm CMB}\approx1.4293\times10^5\), dominated by the Plik-lite high-\(\ell\) likelihood.
+4. The current best candidate pushes \(H_0\) to the upper prior edge and uses extreme \(n_s\) and \(\tau\). This indicates tension with the model/data combination, but also demonstrates that the restricted model is trying to exploit prior boundaries. It must not be presented as a physically viable cosmological solution.
+5. Because the zero-CDM point is not optimized, the large \(\Delta\chi^2\) versus the optimized Lambda-CDM control is only a diagnostic contrast, not an exclusion statistic.
+6. The calculation uses accuracy-0 CAMB and native Plik-lite. It is not yet a definitive Planck likelihood analysis, and the result cannot disprove all dark matter, all non-baryonic matter, or dark energy.
+7. The RFT photon-sector ansatz is not yet implemented as a covariant perturbation theory in CAMB or CLASS. It has not been tested as a physical replacement for CDM.
+
+### 14.8. Handoff plan — ordered next actions
+
+Do these in order. Do not skip directly to another broad optimizer run.
+
+**A. Preserve and reproduce the current candidate**
+
+1. Keep this checkpoint branch as the durable record. Do not modify local `main`, remote `main`, or PR #6.
+2. In the same dedicated venv, directly re-evaluate the current best candidate with `make_finite=False`, `cached=False`, and all four likelihoods. Confirm the parameter values and \(\chi^2\) contributions in Section 14.4.
+3. Repeat that exact point at least once in a fresh Cobaya model instance to check deterministic reproducibility.
+4. Save the exact YAML, stdout/stderr, Python/Cobaya/CAMB/iminuit versions, and the terminal outputs under the existing run directory. Do not overwrite any earlier result files.
+
+**B. Diagnose why both Powell and MIGRAD failed**
+
+1. Inspect the installed Cobaya 3.6.2 source around `minuslogp_transf`, `affine_transform`, `inv_affine_transform`, the transformed bounds, and the iminuit call. Use the exact installed source, not assumptions based on generic Minuit examples.
+2. Reproduce the current starting point and probe small positive/negative coordinate displacements in the same internal transformed parameterization. Check if NaNs arise from bound transforms, finite-penalty behavior for invalid likelihood points, or the likelihood itself.
+3. Verify whether `A_planck`'s unbounded Gaussian prior and its affine transform contribute to the failure. Do not replace it by an arbitrary hard prior without a scientific justification.
+4. Determine which low-\(\ell\) likelihood boundaries reject points as \(H_0,\Omega_bh^2,A_s,n_s,\tau\) move. The observed invalid points include low-EE and low-TT rejections; record each separately.
+5. Do not accept an optimizer's "success" unless Cobaya's independent minimum reproduction succeeds and a direct raw likelihood evaluation reproduces the same finite result.
+
+**C. Improve optimization only after the domain is mapped**
+
+1. Keep the exact same data, likelihood set, theory settings, and physical priors for both models.
+2. If rescaling a variable such as \(A_s\), preserve the intended prior exactly, including the Jacobian if changing variables. Do not silently replace a uniform prior in \(A_s\) by a uniform prior in \(\log A_s\).
+3. Consider a staged fit only if fixed-parameter and subspace tests support it. A reduced fit that fixes nuisance/cosmological parameters must be labeled conditional, not full-model.
+4. Try one minimizer configuration at a time. Store it under a fresh output prefix. First test initialization, then run once, then inspect the full result. Never launch multiple minimizers in parallel.
+5. Require direct raw likelihood re-evaluation of any candidate and, ideally, independent starts before calling it a robust minimum.
+
+**D. Upgrade the scientific comparison**
+
+1. Resolve the CAMB high-\(k\) extrapolation/nonlinear-source issue for accuracy 1. Do not suppress extrapolation warnings or silently turn nonlinear corrections off in only one model.
+2. Repeat matched Lambda-CDM and zero-CDM calculations at a defensible theory accuracy and quantify convergence against accuracy 0.
+3. Obtain the full Planck Plik likelihood if the data/package can be reliably installed; retain Plik-lite results separately and label them accurately.
+4. Cross-check the best spectra using an independent Boltzmann solver such as CLASS.
+5. Compare actual \(C_\ell^{TT}\), \(C_\ell^{TE}\), and \(C_\ell^{EE}\) residuals, not only the scalar likelihood total. Identify which multipoles and spectra drive the large Plik-lite penalty.
+6. Add independent observational constraints such as BAO and other suitable probes only after the CMB comparison is numerically stable. Check that extreme \(H_0,n_s,\tau\) solutions are consistent with the added data.
+7. Calibrate model comparison statistically only after independently validated best fits exist. Since \(\Omega_ch^2=0\) is a boundary of the non-negative parameter space, do not apply an ordinary interior-parameter likelihood-ratio significance formula without checking its validity.
+
+**E. Test RFT as a physical model rather than a label**
+
+1. Derive a covariant background and perturbation framework with explicit conservation laws and degrees of freedom.
+2. Derive the perturbation evolution and transfer functions required by a Boltzmann solver.
+3. Implement the model in a solver or a verified external interface.
+4. Fit its parameters against the same likelihoods and priors, with all nuisance treatments documented.
+5. Compare predictive performance to Lambda-CDM on held-out or independent data where appropriate.
+
+### 14.9. Exact environment and file handoff
+
+Machine/environment previously reported:
+
+- macOS 26.6, Apple Silicon arm64
+- Python 3.14.2
+- venv: `~/.venvs/rft-camb-2.0.5-py314`
+- CAMB 2.0.5
+- Cobaya 3.6.2
+- iminuit 2.33.0 (installed during this session)
+- NumPy 2.5.4, SciPy 1.18.1, GetDist 1.7.7
+- `clipy` installed for native Planck likelihoods
+
+Run directory:
+
+`~/Downloads/RFT-Planck-Runs/matched_accuracy0_20261113_195423/`
+
+Key files:
+
+- `lcdm_accuracy0.yaml`
+- `zero_cdm_accuracy0.yaml`
+- `zero_cdm_accuracy0_powell.yaml`
+- `zero_cdm_accuracy0_iminuit.yaml`
+
+Earlier data and run directories remain:
+
+- `~/Downloads/RFT-Planck-Packages/`
+- `~/Downloads/RFT-Planck-Runs/`
+
+All numerical run artifacts remain outside the Git repository. The commit associated with this update records the results and next-step plan; it does not include Planck data, local venv files, or raw Cobaya outputs.
+
+### 14.10. Repository safety at this update
+
+The documentation update is intended for the existing branch:
+
+`research/planck-cmb-checkpoint-2026-11-13`
+
+The branch had previously been verified as one commit ahead of remote `main`, zero commits behind, based on:
+
+`739cff9d474913d00f5519b5e16d3ef592f9de57`
+
+Only the checkpoint Markdown file is to be updated in this documentation commit. Do not merge the branch into `main`. PR #6 remains separate. Verify the branch comparison again after committing.
