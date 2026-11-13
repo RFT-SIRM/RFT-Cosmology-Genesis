@@ -744,14 +744,14 @@ This section supersedes the "Current best observed zero-CDM candidate" in Sectio
 
 The subsequent calculations continued with the same matched accuracy-0 model:
 
-- \`omch2 = 0.0\` (fixed).
-- \`lens_potential_accuracy = 0\`.
+- `omch2 = 0.0` (fixed).
+- `lens_potential_accuracy = 0`.
 - Likelihoods: low-\(\ell\) TT, low-\(\ell\) EE, native Plik-lite TTTEEE, and native Planck lensing.
-- Direct calls used \`make_finite=False\` and \`cached=False\`.
-- A point was accepted only if \`logpost\` and all four named likelihood contributions were finite.
+- Direct calls used `make_finite=False` and `cached=False`.
+- A point was accepted only if `logpost` and all four named likelihood contributions were finite.
 - Points returning \(-\infty\), NaN, incomplete likelihood dictionaries, or exceptions were not ranked.
 
-The recurring Cobaya warning that direct \`get_model\` evaluation ignores the \`output\` and \`sampler\` blocks is expected for these direct likelihood probes; the model theory and likelihood blocks were loaded.
+The recurring Cobaya warning that direct `get_model` evaluation ignores the `output` and `sampler` blocks is expected for these direct likelihood probes; the model theory and likelihood blocks were loaded.
 
 ### New best observed conditional grid point
 
@@ -803,7 +803,7 @@ A \((\tau,A_{\rm planck})\) slice was examined with \(H_0=100\), \(\Omega_bh^2=0
 
 These are conditional slice results and do not beat the new grid point above. Their fixed parameter context differs from the later \((\Omega_bh^2,A_s,n_s)\) refinement.
 
-The raw stdout of the latest 27-point scan was saved outside the repository at \`~/Downloads/RFT-Planck-Runs/matched_accuracy0_20261113_195423/zero_cdm_grid_refinement_02.log\` (77 lines, approximately 3.9 KB at the time of inspection). The repository checkpoint records the summary; the external log remains the detailed local terminal artifact.
+The raw stdout of the latest 27-point scan was saved outside the repository at `~/Downloads/RFT-Planck-Runs/matched_accuracy0_20261113_195423/zero_cdm_grid_refinement_02.log` (77 lines, approximately 3.9 KB at the time of inspection). The repository checkpoint records the summary; the external log remains the detailed local terminal artifact.
 
 ### Updated optimizer status
 
@@ -817,8 +817,8 @@ The MIGRAD failure mechanism is still **unresolved**. Parameter-bound transforma
 
 ### Next actions from this point
 
-1. Reproduce the new best grid point twice in fresh direct model instances with \`make_finite=False,cached=False\`, and save the full per-likelihood results.
-2. Inspect the exact installed Cobaya 3.6.2 source for \`affine_transform\`, \`inv_affine_transform\`, \`minuslogp_transf\`, transformed bounds, and the call into iminuit. Record the source line numbers and code before proposing a change.
+1. Reproduce the new best grid point twice in fresh direct model instances with `make_finite=False,cached=False`, and save the full per-likelihood results.
+2. Inspect the exact installed Cobaya 3.6.2 source for `affine_transform`, `inv_affine_transform`, `minuslogp_transf`, transformed bounds, and the call into iminuit. Record the source line numbers and code before proposing a change.
 3. Probe the objective in the same transformed coordinates used by Cobaya, first at the candidate and then at small positive/negative coordinate displacements. Check both finite and invalid-domain evaluations.
 4. Do not replace invalid likelihood values with the maximum-float sentinel. Use a finite, documented barrier/penalty only if it preserves the feasible-region objective and is validated against the raw likelihood; alternatively constrain the trial region so invalid proposals are never generated.
 5. Only after those tests, run one bounded/staged optimizer configuration under a fresh output prefix. A staged fit must be labeled conditional if any parameters are fixed.
