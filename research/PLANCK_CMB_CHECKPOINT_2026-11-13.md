@@ -825,3 +825,191 @@ The MIGRAD failure mechanism is still **unresolved**. Parameter-bound transforma
 6. Directly re-evaluate any candidate minimum, check independent-start reproducibility, then expand the scientific comparison to matched higher theory accuracy, full Plik if available, spectra residuals, and independent data. No dark-matter exclusion claim is supported at this stage.
 
 The current scientific status remains exploratory: the best observed zero-CDM grid point is not a global best fit, and no statistically calibrated model exclusion has been established.
+
+
+---
+
+## 14.12. Session update — reproducibility and MIGRAD diagnostics (2026-11-14 morning)
+
+This update records new numerical checks performed in the existing local
+environment. It supersedes no cosmological fit: no valid optimized zero-CDM
+minimum has been obtained. All optimizer experiments below are diagnostic
+and conditional.
+
+### Reproduction of the best observed conditional grid point
+
+The current best observed conditional grid point from Section 14.11 was
+evaluated twice using fresh Cobaya model instances, with
+`make_finite=False` and `cached=False`.
+
+Environment:
+
+- Cobaya 3.6.2
+- CAMB 2.0.5
+- NumPy 2.5.4
+- SciPy 1.18.1
+- Python 3.14 (arm64 environment)
+- iminuit 2.33.0
+
+Both independent evaluations returned exactly the same displayed values:
+
+- `minuslogposterior = 71202.82490850563`
+- `chi2__CMB = 142454.95099736075`
+- difference between fresh model instances: `0.0`
+- difference from the checkpoint value: approximately `-2.62e-10`
+
+The individual likelihood-derived chi-squared contributions were:
+
+| Component | `chi2` |
+|---|---:|
+| Planck low-\(\ell\) TT | 175.662245228572 |
+| Planck low-\(\ell\) EE | 435.067184170785 |
+| Native Plik-lite TTTEEE | 132375.342744373309 |
+| Planck lensing native | 9468.878823588093 |
+| **Total** | **142454.950997360750** |
+
+The returned prior contribution was
+`logpriors = 24.650590174739307`. Thus the difference between
+\(\chi^2/2\) and the negative log-posterior is accounted for by the
+reported prior contribution. This confirms deterministic reproducibility
+of this point, not that it is an optimized or global minimum.
+
+### Inspection of the installed Cobaya/iminuit transformations
+
+The exact installed Cobaya 3.6.2 source was inspected. Its minimizer uses
+
+\[
+x_i = \frac{p_i-p_{i,0}}{s_i}
+\]
+
+and maps back with clipping to the physical parameter bounds. It passes
+the transformed bounds to `iminuit.minimize`.
+
+The installed iminuit 2.33.0 wrapper constructs
+`Minuit(wrapped_fun, x0, grad=wrapped_grad)`, sets the limits, and sets
+`m.errors` only when an explicit `options["eps"]` is supplied.
+
+An important correction to the preliminary interpretation: the
+documentation for the wrapper describes an `eps` option whose documented
+default is 1, but Cobaya does not pass that option and the wrapper does not
+assign it in this case. Direct inspection of the constructed Minuit object
+showed the actual default step errors to be:
+
+`[0.1, 0.1, 0.1, 0.1, 0.1, 0.1]`.
+
+The transformed initial point is the origin. The transformed bounds and
+available room on the positive side are:
+
+| Parameter | Internal lower bound | Internal upper bound | Positive room from start |
+|---|---:|---:|---:|
+| \(H_0\) | -6.9270485297 | 0.001154700538 | 0.001154700538 |
+| \(\Omega_bh^2\) | -2.9692299558 | 3.9589732744 | 3.9589732744 |
+| \(A_s\) | -0.7505553499 | 6.1776478803 | 6.1776478803 |
+| \(n_s\) | -3.8105117767 | 3.1176914536 | 3.1176914536 |
+| \(\tau\) | -2.0170718265 | 4.9111314037 | 4.9111314037 |
+| \(A_{\rm planck}\) | -26.7363001804 | 23.5268281801 | 23.5268281801 |
+
+The initial Minuit step of 0.1 is about 86.60 times the available
+positive internal room for \(H_0\). The other five parameters do not
+have a comparable step-to-boundary ratio.
+
+Small one-coordinate probes remained finite on both sides for all six
+parameters. This rules out a non-finite objective at the starting point
+or at those particular local probe points.
+
+### MIGRAD step-size and fixed-\(H_0\) experiments
+
+Two short six-parameter MIGRAD probes were compared:
+
+- Default Minuit steps: all six `m.errors = 0.1`.
+- Reduced \(H_0\) step: `eps = [0.0001, 0.1, 0.1, 0.1, 0.1, 0.1]`.
+
+Both runs eventually produced non-finite internal coordinates. Reducing
+the initial \(H_0\) step by a factor of 1000 did not resolve the failure.
+The individual recorded finite objective evaluations do not establish
+that the minimizer's internal state remained valid.
+
+A further diagnostic fixed \(H_0=99.99\) in Minuit and left the other
+five parameters free. This also failed. In that conditional run:
+
+- The initial objective was finite:
+  `71484.069858565563`.
+- Calls 1–23 evaluated finite objective values.
+- Calls 24 and 25 returned the maximum finite IEEE-754 double,
+  approximately \(1.7976931348623157\times10^{308}\), at trial points
+  with \(n_s\) close to or above the upper prior region.
+- Call 26 returned a finite objective,
+  `71457.638174474938`.
+- Minuit then passed internal coordinates
+  `[0, nan, nan, nan, nan, nan]` to the objective.
+
+The maximum-double values are finite as floating-point numbers, but they
+are penalty/sentinel-scale objective values and must not be interpreted as
+valid likelihood evaluations. Fixing \(H_0\) did not prevent the NaN
+failure, so the failure cannot be attributed solely to the \(H_0\)
+boundary.
+
+### Current interpretation and limits
+
+The diagnostics establish:
+
+1. The best observed conditional point is reproducible in two fresh
+   Cobaya model instances.
+2. The actual default Minuit step errors are 0.1, not 1.
+3. The \(H_0\) internal upper bound is unusually close to the starting
+   point, but reducing its initial step alone did not cure MIGRAD.
+4. Fixing \(H_0\) also did not cure MIGRAD.
+5. In the fixed-\(H_0\) run, maximum-double penalty-scale objective
+   returns were observed immediately before Minuit generated NaN
+   coordinates.
+
+The sequence in item 5 makes the handling of invalid trial points and
+very large penalty values a priority for further investigation. It does
+**not** yet prove that the sentinel values are the sole cause of the NaNs:
+the internal Minuit state, gradient/Hessian updates, parameter limits,
+and likelihood-domain transitions still need to be isolated.
+
+No zero-CDM optimizer result is accepted as a minimum. No likelihood
+component or physical model has been changed. The accuracy-0/native
+Plik-lite limitations and all scientific interpretation limits from
+Sections 14.11 and earlier remain in force.
+
+### Logs retained outside the repository
+
+The following raw logs remain in the local run directory and are
+intentionally not committed:
+
+- `candidate_reproduction_20261114_081708.log`
+- `cobaya_transform_source_20261114_082312.log`
+- `migrad_affine_probe_20261114_082844.log`
+- `migrad_step_comparison_20261114_083521.log`
+- `migrad_fixed_H0_probe_20261114_083655.log`
+
+Directory:
+
+`~/Downloads/RFT-Planck-Runs/matched_accuracy0_20261113_195423/`
+
+No Planck data, virtual-environment files, raw logs, YAML experiment
+configurations, or source-code changes are included in this documentation
+update.
+
+### Next diagnostic actions
+
+1. Trace the exact Cobaya code path that converts invalid posterior or
+   likelihood evaluations into the maximum-double objective value.
+2. Re-evaluate the two recorded invalid trial points with raw
+   `make_finite=False` likelihood calls and identify which likelihood
+   component rejects each point.
+3. Instrument the objective boundary to distinguish a non-finite physical
+   likelihood, a finite penalty sentinel, and a non-finite internal
+   Minuit coordinate.
+4. Only after identifying that path, test a numerically safe treatment
+   of invalid trial points or a feasible-domain parameterization. Do not
+   alter physical priors or silently cap objective values.
+5. Re-run one optimizer experiment at a time and accept a minimum only
+   after Cobaya's independent recomputation and direct likelihood
+   reevaluation agree.
+
+The current status remains exploratory: the conditional point is
+reproducible, but a valid optimized zero-CDM fit and a statistically
+calibrated model comparison remain unresolved.
