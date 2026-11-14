@@ -1,8 +1,10 @@
 # Exact Invariant Remainder Theorem
 
-[![Mathematical status](https://img.shields.io/badge/math-exact%20algebraic%20identity-0f766e?style=for-the-badge)](./MODEL_SPEC.md)
-[![Verification](https://img.shields.io/badge/verification-symbolic%20derivation%20%2B%20tests-2563eb?style=for-the-badge)](./RESULTS.md)
-[![Physical interpretation](https://img.shields.io/badge/physical%20claim-not%20established-d97706?style=for-the-badge)](./LIMITATIONS.md)
+<div align="center">
+
+[![Mathematical status](https://img.shields.io/badge/math-exact%20algebraic%20identity-0f766e?style=flat)](./MODEL_SPEC.md) [![Verification](https://img.shields.io/badge/verification-symbolic%20derivation%20%2B%20tests-2563eb?style=flat)](./RESULTS.md) [![Physical interpretation](https://img.shields.io/badge/physical%20claim-not%20established-d97706?style=flat)](./LIMITATIONS.md)
+
+</div>
 
 ## Statement
 

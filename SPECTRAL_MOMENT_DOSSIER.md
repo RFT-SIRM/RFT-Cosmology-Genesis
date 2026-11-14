@@ -159,13 +159,13 @@ Sources: [H¹⁰ source map and status](https://github.com/RFT-SIRM/Evgeny-Theor
 
 Phi-Genesis contains a separate scalar signed-graph calculation. Its signed Laplacian is
 
-\`\`\`math
+```math
 L_m = \mathcal{D}_m-A_{s,m},
 \qquad
 \mathcal{D}_m=\mathrm{diag}_{v\in V_m}\bigl(\deg_m(v)\bigr).
-\`\`\`
+```
 
-Here A<sub>s,m</sub> is the signed adjacency matrix; the subscript s means **signed**. The diagonal term is the ordinary vertex-degree matrix, denoted by \(\mathcal{D}_m\) here to avoid overloading D<sub>m</sub>, which denotes the scalar tenth-trace defect below.
+Here A<sub>s,m</sub> is the signed adjacency matrix; the subscript s means **signed**. The diagonal term is the ordinary vertex-degree matrix, denoted by the calligraphic Dₘ here to avoid overloading D<sub>m</sub>, which denotes the scalar tenth-trace defect below.
 
 The lower-case s in A<sub>s,m</sub> is a matrix label meaning “signed”. It is not the shorthand s = sin(θ/2) used for the SU(2) H⁶/H⁸ formulas in Section 3. The uppercase S below is a third object: a vertex-switching matrix.
 
@@ -173,41 +173,41 @@ This is **not** the noncommutative SU(2) operator used by Evgeny's Theorem.
 
 For a generation mask t = (t₁, …, tₘ), the 4 November checkpoint records the following all-level recurrence derivation:
 
-\`\`\`math
+```math
 F_{m+1}(t_1,\ldots,t_m,d)
 =3F_m(t_1,\ldots,t_m)+Q(a,b,c,d),
 \quad m\geq3.
-\`\`\`
+```
 
 where a = t₁, b = t₂, c = t₃, and
 
-\`\`\`math
+```math
 \begin{aligned}
 Q={}&127182024+89195520a+73945440b-145153920ab\\
 &+55360c-150880ac+40320bc-39680abc\\
 &+d(115347760-110022480a+10024960b\\
 &\qquad-20854720ab+320c-640ac).
 \end{aligned}
-\`\`\`
+```
 
 For the full-flux difference Dₘ = Fₘ(1, …, 1) − Fₘ(0, …, 0), the checkpoint derives
 
-\`\`\`math
+```math
 D_{m+1}=3D_m+12387360,\qquad m\geq3,
-\`\`\`
+```
 
 and consequently
 
-\`\`\`math
+```math
 D_m=555046440\cdot3^{m-3}-6193680.
-\`\`\`
+```
 
 If this recurrence holds for every m ≥ 3, normalization per graph vertex gives
 
-\`\`\`math
+```math
 \lim_{m\to\infty}\frac{D_m}{|V_m|}
 =\frac{370030960}{27}.
-\`\`\`
+```
 
 **Evidence status must remain explicit.** The 3 November follow-up reports exact finite calculations and structural checks only; it expressly does not claim an all-level theorem or a Lean 4 proof. It records that 243 individually tested boundary-invisible edge flips preserve the prescribed hole parities but each changes H¹⁰, producing 48 distinct trace changes. Thus 12,387,360 belongs to the specified deterministic representative family, not to hole flux alone.
 
@@ -217,26 +217,26 @@ The 4 November checkpoint goes further and **claims an inductive all-level deriv
 
 **1. Exact sparse-trace evaluation.** For a real symmetric signed Laplacian L,
 
-\`\`\`math
+```math
 \mathrm{Tr}(L^{10})=\|L^5\|_F^2.
-\`\`\`
+```
 
 This is the computational identity used by the 3 November follow-up and Python implementation to evaluate the tenth trace using exact sparse-integer arithmetic.
 
 **2. Vertex-switching invariance.** Let S = diag(ηᵥ), where each vertex sign ηᵥ is +1 or −1. Switching sends L to SLS. Since S² = I, the trace is unchanged:
 
-\`\`\`math
+```math
 \mathrm{Tr}\bigl((SLS)^{10}\bigr)=\mathrm{Tr}(L^{10}).
-\`\`\`
+```
 
 This is invariance under a change of vertex-sign representative in the **same full signed-graph switching class**. It does not say that hole-boundary parities alone fix that switching class.
 
 **3. Two-component lift identity.** Let I₂ be the 2 × 2 identity matrix. Then
 
-\`\`\`math
+```math
 \mathrm{Tr}\bigl((L\otimes I_2)^{10}\bigr)
 =2\,\mathrm{Tr}(L^{10}).
-\`\`\`
+```
 
 This follows because L ⊗ I₂ is two identical copies of the scalar operator. It is only a trace-doubling identity; it does **not** identify the scalar signed-Z₂ defect with the noncommutative SU(2) axis-orientation defect. The operators, boundary data, recurrences, and coefficients remain different.
 
