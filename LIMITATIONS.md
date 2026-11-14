@@ -6,6 +6,6 @@
 4. The baseline acoustic multipoles are supplied reference values rather than outputs of a fitted cosmological parameter set.
 5. Recombination and diffusion physics are not represented at full Boltzmann-code fidelity.
 6. No TT/TE/EE likelihood is evaluated.
-7. No Bayesian posterior for \(\epsilon\) is provided.
+7. No Bayesian posterior for ε is provided.
 8. No claim of observational detection is made.
 9. No claim of a new physical law is made by the numerical code alone.
