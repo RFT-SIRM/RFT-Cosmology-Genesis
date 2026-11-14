@@ -1206,3 +1206,179 @@ raw logs are not included in the repository.
 No likelihood boundary was widened, no invalid likelihood was replaced
 with a hand-chosen finite value, and no optimizer result was promoted
 to a fitted cosmological minimum.
+
+
+---
+## 14.14. Conditional two-dimensional low-TT support boundary
+
+This section records the completed conditional two-dimensional scan of
+the native Planck low-ell TT support boundary. It follows the raw
+likelihood diagnosis in Section 14.13. No optimizer was run and no
+prior, likelihood bound, or CAMB accuracy setting was changed.
+
+### Fixed parameters
+
+The scan varied only `n_s` and `ombh2`. All other sampled and fixed
+parameters remained at the FCN26 control point:
+
+| Parameter | Value |
+|---|---:|
+| H0 | 99.99 |
+| omch2 | 0 (fixed) |
+| As | 9.874936082854e-10 |
+| tau | 0.2400036089221 |
+| A_planck | 1.000804852608 |
+| mnu | 0.06 |
+| nnu | 3.046 |
+| lens_potential_accuracy | 0 |
+
+The tested configuration was the external
+`zero_cdm_accuracy0_iminuit.yaml`. The local environment used CAMB
+2.0.5 and Cobaya 3.6.2. Every likelihood evaluation used
+`make_finite=False`, and no minimizer was involved.
+
+### CAMB-success intervals
+
+The preceding CAMB recombination scan found three transitions at this
+fixed parameter slice:
+
+- Last successful point below the low-density failure interval:
+  `ombh2 = 0.018632091697280515`.
+- Last successful point before the central failure interval:
+  `ombh2 = 0.020837989546081976`.
+- First successful point after the central failure interval:
+  `ombh2 = 0.021125541386001475`.
+
+The refined TT boundary scan stayed inside two CAMB-success intervals:
+
+- Lower branch: `ombh2 = 0.01865 ... 0.02082` (39 samples).
+- Upper branch: `ombh2 = 0.02114 ... 0.02150` (8 samples).
+
+The intervening CAMB failure interval was not interpolated across or
+treated as a Planck likelihood rejection.
+
+### Refined TT boundary
+
+At each of the 47 baryon-density values, bisection located an inside
+point with finite native TT and an outside point with non-finite native
+TT. The stopping tolerance in `n_s` was `1e-9`.
+
+All 47 transitions were controlled by the lower spline bound at
+`ell = 15`. At every accepted inside point all four likelihoods
+(low-ell TT, low-ell EE, native Plik-lite TTTEEE, and native lensing)
+were finite.
+
+The boundary moved monotonically downward in `n_s` as `ombh2`
+increased within each of the two CAMB-success intervals:
+
+- Lower branch: `n_s = 1.0263391817`
+  at `ombh2 = 0.01865000` to
+  `n_s = 1.0224061117`
+  at `ombh2 = 0.02082000`.
+- Upper branch: `n_s = 1.0219192147`
+  at `ombh2 = 0.02114000` to
+  `n_s = 1.0213708216`
+  at `ombh2 = 0.02150000`.
+
+### Empirical interpolation summaries
+
+For compact description only, polynomial regressions were performed
+separately on the two disconnected CAMB-success branches. Define
+`x = ombh2 - 0.02`.
+
+Lower branch (quadratic, 39 points):
+
+`n_s_boundary ≈ 122.0075971 x^2 + (-1.746349867) x + 1.02375269`
+
+RMS residual: `6.30817e-06`; maximum absolute residual:
+`1.16692e-05`.
+
+Upper branch (linear, 8 points):
+
+`n_s_boundary ≈ (-1.532107716) x + 1.023667508`
+
+RMS residual: `2.31827e-06`; maximum absolute residual:
+`4.10794e-06`.
+
+These regressions are descriptive interpolants over the sampled intervals,
+not physical laws and not global parameter constraints. In particular,
+no single polynomial is fitted across the CAMB failure gap.
+
+### Complete point-by-point data
+
+The exact inside/outside brackets for all 47 points are committed as:
+
+`research/data/conditional_lowell_tt_boundary_2026-11-14.csv`
+
+The corresponding plot is:
+
+![Conditional native low-ell TT support boundary](figures/conditional_lowell_tt_boundary_2026-11-14.png)
+
+### Interpretation and scope
+
+This completes the conditional `(n_s, ombh2)` boundary-mapping stage
+at the FCN26 fixed parameters. It establishes that the native
+low-ell TT support boundary is controlled by `ell = 15` and changes
+systematically with baryon density on both CAMB-success branches.
+
+It does **not** establish a global upper bound on `n_s`, a best-fit
+zero-CDM cosmology, a statistically calibrated exclusion of zero CDM,
+or an observational constraint on the RFT coupling `epsilon`. The fixed
+`H0 = 99.99` value is itself at the upper edge of the tested prior
+region. This slice must not be presented as a free six-parameter fit.
+
+No further refinement of this same conditional boundary is required
+unless a new scientific question demands it. Future work should move
+to a different inferential target, not repeat this grid.
+
+### Point-by-point boundary table
+
+| \omega_b h^2 | n_s inside | n_s outside | bracket width |
+|---:|---:|---:|---:|
+| 0.018650000000 | 1.026339181662 | 1.026339182317 | 6.557e-10 |
+| 0.018707105263 | 1.026217654765 | 1.026217655420 | 6.557e-10 |
+| 0.018764210526 | 1.026092953205 | 1.026092953861 | 6.557e-10 |
+| 0.018821315789 | 1.025974516392 | 1.025974517047 | 6.557e-10 |
+| 0.018878421053 | 1.025863297641 | 1.025863298297 | 6.557e-10 |
+| 0.018935526316 | 1.025747137904 | 1.025747138560 | 6.557e-10 |
+| 0.018992631579 | 1.025634268224 | 1.025634268880 | 6.557e-10 |
+| 0.019049736842 | 1.025523558259 | 1.025523558915 | 6.557e-10 |
+| 0.019106842105 | 1.025402725697 | 1.025402726352 | 6.557e-10 |
+| 0.019163947368 | 1.025288969576 | 1.025288970232 | 6.557e-10 |
+| 0.019221052632 | 1.025182485938 | 1.025182486594 | 6.557e-10 |
+| 0.019278157895 | 1.025075154543 | 1.025075155199 | 6.557e-10 |
+| 0.019335263158 | 1.024971949816 | 1.024971950471 | 6.557e-10 |
+| 0.019392368421 | 1.024865147531 | 1.024865148187 | 6.557e-10 |
+| 0.019449473684 | 1.024758291483 | 1.024758292139 | 6.557e-10 |
+| 0.019506578947 | 1.024652100921 | 1.024652101576 | 6.557e-10 |
+| 0.019563684211 | 1.024539671838 | 1.024539672494 | 6.557e-10 |
+| 0.019620789474 | 1.024437330604 | 1.024437331259 | 6.557e-10 |
+| 0.019677894737 | 1.024334255040 | 1.024334255695 | 6.557e-10 |
+| 0.019735000000 | 1.024227024615 | 1.024227025270 | 6.557e-10 |
+| 0.019792105263 | 1.024132689536 | 1.024132690191 | 6.557e-10 |
+| 0.019849210526 | 1.024026097715 | 1.024026098371 | 6.557e-10 |
+| 0.019906315789 | 1.023928588629 | 1.023928589284 | 6.557e-10 |
+| 0.019963421053 | 1.023814146698 | 1.023814147353 | 6.557e-10 |
+| 0.020020526316 | 1.023708186269 | 1.023708186924 | 6.557e-10 |
+| 0.020077631579 | 1.023611857355 | 1.023611858010 | 6.557e-10 |
+| 0.020134736842 | 1.023509303689 | 1.023509304345 | 6.557e-10 |
+| 0.020191842105 | 1.023416346788 | 1.023416347444 | 6.557e-10 |
+| 0.020248947368 | 1.023316144288 | 1.023316144943 | 6.557e-10 |
+| 0.020306052632 | 1.023222430766 | 1.023222431421 | 6.557e-10 |
+| 0.020363157895 | 1.023127366602 | 1.023127367258 | 6.557e-10 |
+| 0.020420263158 | 1.023034045160 | 1.023034045815 | 6.557e-10 |
+| 0.020477368421 | 1.022944190145 | 1.022944190800 | 6.557e-10 |
+| 0.020534473684 | 1.022847583234 | 1.022847583890 | 6.557e-10 |
+| 0.020591578947 | 1.022769430935 | 1.022769431591 | 6.557e-10 |
+| 0.020648684211 | 1.022675334513 | 1.022675335169 | 6.557e-10 |
+| 0.020705789474 | 1.022586681306 | 1.022586681962 | 6.557e-10 |
+| 0.020762894737 | 1.022498851597 | 1.022498852253 | 6.557e-10 |
+| 0.020820000000 | 1.022406111717 | 1.022406112373 | 6.557e-10 |
+| 0.021140000000 | 1.021919214725 | 1.021919215381 | 6.557e-10 |
+| 0.021191428571 | 1.021841392875 | 1.021841393530 | 6.557e-10 |
+| 0.021242857143 | 1.021765760899 | 1.021765761554 | 6.557e-10 |
+| 0.021294285714 | 1.021688630760 | 1.021688631415 | 6.557e-10 |
+| 0.021345714286 | 1.021603957355 | 1.021603958011 | 6.557e-10 |
+| 0.021397142857 | 1.021523586333 | 1.021523586988 | 6.557e-10 |
+| 0.021448571429 | 1.021447641611 | 1.021447642267 | 6.557e-10 |
+| 0.021500000000 | 1.021370821595 | 1.021370822251 | 6.557e-10 |
