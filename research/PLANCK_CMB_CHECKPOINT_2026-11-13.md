@@ -993,7 +993,9 @@ No Planck data, virtual-environment files, raw logs, YAML experiment
 configurations, or source-code changes are included in this documentation
 update.
 
-### Next diagnostic actions
+### Diagnostic actions recorded before Section 14.13
+
+**Status update (2026-11-14, Section 14.13):** actions 1 and 2 below have been completed. Raw replay with `make_finite=False` identified native `planck_2018_lowl.TT` as the rejecting component at FCN24 and FCN25; the multipole-domain violations and conditional `n_s` boundary are recorded in Section 14.13. Action 3 is partly resolved: the raw `-inf` likelihood and the later non-finite Minuit coordinates have been distinguished, but the precise cause of Minuit's NaN proposal remains open. Actions 4 and 5 remain future work.
 
 1. Trace the exact Cobaya code path that converts invalid posterior or
    likelihood evaluations into the maximum-double objective value.
@@ -1013,3 +1015,194 @@ update.
 The current status remains exploratory: the conditional point is
 reproducible, but a valid optimized zero-CDM fit and a statistically
 calibrated model comparison remain unresolved.
+
+
+---
+## 14.13. Session update — native low-ell TT domain and MIGRAD diagnosis (2026-11-14)
+
+This update records the raw-likelihood replay and the fixed-parameter
+spectral-domain scan performed after Section 14.12. It diagnoses the
+maximum-float objective values seen in the fixed-H0 MIGRAD experiment.
+It does not produce a zero-CDM fit and does not modify any prior,
+likelihood, theory setting, or physical model.
+
+### Environment and configuration
+
+The calculations used the existing external environment:
+
+- Python 3.14.2
+- CAMB 2.0.5
+- Cobaya 3.6.2
+- iminuit 2.33.0
+- NumPy 2.5.4
+- SciPy 1.18.1
+- pytest 9.2.0
+
+The tested configuration was
+`zero_cdm_accuracy0_iminuit.yaml` in
+`~/Downloads/RFT-Planck-Runs/matched_accuracy0_20261113_195423/`.
+It fixes `omch2 = 0`, uses `lens_potential_accuracy = 0`, and includes
+native Planck low-ell TT, low-ell EE, Plik-lite TTTEEE, and lensing.
+
+The repository was on `main` at `8a2c928`; the worktree was clean.
+The local repository test suite passed: **58 passed**.
+
+### Installed low-ell TT rejection rule
+
+The installed implementation was inspected in:
+
+`cobaya/likelihoods/planck_2018_lowl/TT.py`
+
+For each multipole from ell = 2 through ell = 29, it forms the calibrated
+theory spectrum and checks it against the stored spline bounds. The
+likelihood returns `-inf` if any value falls below its lower bound or above
+its upper bound. Only after that check does it evaluate the Gaussianizing
+spline derivative; a negative derivative also returns `-inf`.
+
+The order of these checks matters. A derivative sampled outside the
+permitted spline interval is not an independent explanation of the
+rejection: the actual likelihood exits at the preceding bounds check.
+
+### Raw replay of MIGRAD trial points
+
+The two maximum-float trial points were re-evaluated with
+`make_finite = False` and `cached = False`. The prior and CAMB theory
+calculation were finite in both cases. Low-ell EE, Plik-lite TTTEEE,
+and lensing were also finite. The low-ell TT component alone returned
+`-inf`.
+
+| Trial | n_s | Raw log-prior | Low-ell TT | TT domain result |
+|---|---:|---:|---:|---|
+| FCN24 | 1.199769401717 | 24.444700071804 | `-inf` | 18 of 28 multipoles below lower bounds |
+| FCN25 | 1.034092220841 | 24.643710486001 | `-inf` | only ell = 15 below its lower bound |
+| FCN26 control | 1.020707608396 | 24.649967157091 | -85.878233388549 | all 28 multipoles inside bounds |
+
+At FCN24, the multipoles below their lower spline bounds were:
+
+`5, 7, 9, 10, 11, 12, 14, 15, 17, 18, 19, 23, 24, 25, 26, 27, 28, 29`.
+
+The smallest lower-bound margin was approximately `-182.3947415`
+at ell = 15. The theory values themselves were finite; no upper-bound
+violation or non-finite C_l was found.
+
+At FCN25, the only violation was:
+
+| Quantity | Value |
+|---|---:|
+| ell | 15 |
+| Theory D_15^TT after calibration | 372.5417141618 |
+| Native TT lower spline bound | 386.8925568207 |
+| Margin | -14.3508426589 |
+
+At FCN26, all multipoles passed the domain check. The closest point was
+again ell = 15, with a positive margin of `4.285950904695`.
+
+For FCN24 and FCN25, the other three log-likelihood components remained
+finite. Therefore the raw posterior rejection at these two points is
+directly attributable to the native low-ell TT spline-domain check, not
+to the prior, a failed CAMB call, or the other three likelihoods.
+
+### Conditional n_s boundary at fixed FCN26 parameters
+
+A one-dimensional scan varied only `n_s`; all other parameters were held
+at their FCN26 values:
+
+| Parameter | Fixed value |
+|---|---:|
+| H0 | 99.99 |
+| ombh2 | 0.01999994830543 |
+| As | 9.874936082854e-10 |
+| tau | 0.2400036089221 |
+| A_planck | 1.000804852608 |
+| omch2 | 0 (fixed) |
+
+A 17-point scan bracketed the first domain transition between:
+
+- in-domain: `n_s = 1.02321722322944`
+- out-of-domain: `n_s = 1.02405376150725`
+
+Bisection refinement gave the conditional boundary:
+
+`n_s* = 1.02374434007214`, controlled by the lower spline bound at
+ell = 15.
+
+At this boundary the calibrated theory value at ell = 15 equals the
+lower bound, approximately `386.8925568207`. The one-sided checks were:
+
+| n_s | ell = 15 lower-bound margin | Native TT log-likelihood |
+|---:|---:|---:|
+| 1.02374424007214 | +0.000140336123 | -88.876818635622 |
+| 1.02374444007214 | -0.000140336076 | `-inf` |
+
+This is a **conditional numerical support boundary** for the installed
+native low-ell TT likelihood with the other five parameters fixed as
+listed. It is not a universal upper limit on n_s, not a prior bound, not
+a physical exclusion, and not a likelihood boundary mapped over the full
+six-dimensional parameter space.
+
+### What this establishes about MIGRAD — and what remains open
+
+Established:
+
+1. The maximum-float objective values in the fixed-H0 MIGRAD trial
+   correspond to raw posterior evaluations of `-inf`.
+2. In the two replayed trials, the rejection is caused by the native
+   low-ell TT spline lower bounds.
+3. FCN25 fails because of a single low-ell TT multipole, ell = 15.
+4. FCN24 fails at 18 multipoles.
+5. A small change in n_s across the conditional FCN26 boundary is
+   sufficient to change the native TT likelihood from finite to `-inf`.
+
+Not established:
+
+1. Why Minuit subsequently generated non-finite internal coordinates.
+   The invalid likelihood evaluations precede that event, but this
+   sequence alone does not prove that the maximum-float penalty is its
+   sole cause.
+2. The feasible region when n_s, H0, ombh2, As, tau, and A_planck vary
+   together.
+3. A valid optimized zero-CDM minimum.
+4. A statistically calibrated exclusion of zero CDM.
+5. Any constraint on the RFT photon-sector coupling epsilon.
+
+The 12 negative spline derivatives reported by the separate diagnostic
+for FCN24 were evaluated at theory values already outside the allowed
+spline bounds. They are not counted as an additional likelihood failure
+mechanism because the installed likelihood returns at the earlier
+bounds check.
+
+### Raw local artifacts
+
+The following diagnostic outputs remain outside Git in
+`~/Downloads/RFT-Planck-Runs/matched_accuracy0_20261113_195423/`:
+
+- `migrad_step_comparison_20261114_083521.log`
+- `migrad_fixed_H0_probe_20261114_083655.log`
+- `migrad_affine_probe_20261114_082844.log`
+- `migrad_raw_replay_20261114.log`
+- `lowl_tt_domain_diagnostic_20261114.log`
+- `lowl_tt_ns_boundary_20261114.log`
+
+Planck data, local virtual-environment files, YAML configurations, and
+raw logs are not included in the repository.
+
+### Ordered next work
+
+1. Map the feasible low-ell TT region in coupled slices, starting with
+   `(n_s, ombh2)` around the FCN26 point while holding the other
+   parameters fixed. Accept points only after raw `make_finite=False`
+   evaluation and explicit inspection of all four likelihoods.
+2. Extend the slice to `As` and `tau` only after the first two-dimensional
+   map is understood. Keep the original priors, CAMB settings, and
+   likelihood implementation unchanged.
+3. Separate the native TT support boundary from the low-ell EE support
+   boundary; do not combine them into one generic "invalid point" label.
+4. Only then test a constrained or staged optimizer. Any fixed-parameter
+   stage must be labelled conditional, and every candidate must be
+   independently re-evaluated with raw likelihoods.
+5. Keep the unresolved Minuit NaN transition as a separate numerical
+   issue until a direct reproduction identifies its cause.
+
+No likelihood boundary was widened, no invalid likelihood was replaced
+with a hand-chosen finite value, and no optimizer result was promoted
+to a fitted cosmological minimum.

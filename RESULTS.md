@@ -57,4 +57,6 @@ The previous archival value 0.010398572693481 is not reproduced by this zero-cou
 
 The calculation demonstrates numerical behavior of a specified reduced phenomenological model. It does not demonstrate that the photon-sector coupling exists in nature.
 
-No full Boltzmann treatment or Planck, ACT, SPT, BAO, supernova, lensing, or joint likelihood fit is implemented. No observational detection or constraint on $\epsilon$ is claimed.
+No full Boltzmann treatment or Planck, ACT, SPT, BAO, supernova, lensing, or joint likelihood fit **for the RFT coupling $\epsilon$** is implemented. No observational detection or constraint on $\epsilon$ is claimed.
+
+A separate exploratory standard-gravity CAMB/Cobaya comparison of a Lambda-CDM reference and fixed-zero-CDM candidates is documented in [the Planck/CAMB research checkpoint](research/PLANCK_CMB_CHECKPOINT_2026-11-13.md). It uses low-ell TT/EE, native Plik-lite TTTEEE, and native lensing likelihoods at matched `lens_potential_accuracy = 0`. It does not implement or constrain the RFT coupling and has not produced an optimized zero-CDM minimum or a statistically calibrated exclusion.

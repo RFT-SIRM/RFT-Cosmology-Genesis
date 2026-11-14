@@ -8,9 +8,14 @@
 
 ## Purpose
 
-RFT-Cosmology-Genesis records a reproducible **Pass-1 phenomenological** calculation that maps the intensive spectral invariant from the RFT mathematical line into an explicit photon-sector coupling ansatz and evaluates a reduced **background / acoustic-scale** response.
+RFT-Cosmology-Genesis contains two deliberately separate research tracks:
 
-**This repository does not claim that the coupling is a physical cosmological interaction or that it explains the observed CMB.** It does not yet calculate a full TT/TE/EE spectrum or evaluate an observational likelihood.
+1. **RFT Pass-1 phenomenological model.** It maps the intensive spectral invariant from the RFT mathematical line into a photon-sector coupling ansatz and evaluates a reduced **background / acoustic-scale** response.
+2. **Exploratory standard-gravity Planck/CAMB diagnostics.** A separate external calculation compares a Lambda-CDM reference with fixed-zero-CDM trial points using Planck 2018 low-ell TT/EE, native Plik-lite TTTEEE, and native lensing likelihoods. Its numerical record is in [the Planck/CAMB research checkpoint](./research/PLANCK_CMB_CHECKPOINT_2026-11-13.md).
+
+These tracks are not a single fitted model. The RFT photon-sector ansatz has not been implemented as a covariant perturbation model in CAMB or CLASS and has not been tested as a physical replacement for CDM. The zero-CDM optimizer has not produced a valid optimized minimum; its reported candidates and likelihood-domain studies remain exploratory. The Planck experiment uses native **Plik-lite**, not the full Planck Plik likelihood.
+
+**No claim is made that the RFT coupling is a physical cosmological interaction, that it explains the observed CMB, or that dark matter has been disproved.** No Planck likelihood constraint on the RFT coupling parameter epsilon has been established.
 
 ## Mathematical input
 
@@ -60,6 +65,7 @@ The dossier also distinguishes the separate scalar signed-Z₂ H¹⁰ programme 
 | Reproducible results | [RESULTS.md](./RESULTS.md) |
 | Limitations | [LIMITATIONS.md](./LIMITATIONS.md) |
 | Research status | [RESEARCH_STATUS.md](./RESEARCH_STATUS.md) |
+| Exploratory Planck/CAMB diagnostics | [research/PLANCK_CMB_CHECKPOINT_2026-11-13.md](./research/PLANCK_CMB_CHECKPOINT_2026-11-13.md) |
 
 ## Reproduction
 
@@ -69,6 +75,8 @@ The dossier also distinguishes the separate scalar signed-Z₂ H¹⁰ programme 
     python -m pytest -q
 
 The Python CI workflow runs the complete pytest suite. The Lean workflow builds the scalar H⁴ formalization when Lean sources or its workflow change. See the latest [GitHub Actions runs](https://github.com/RFT-SIRM/RFT-Cosmology-Genesis/actions).
+
+The external Planck/CAMB experiment is not reproduced by `pytest`: its YAML configurations, Planck data package, Python environment, and raw Cobaya logs are stored outside this repository. The checkpoint records the tested versions, likelihood definitions, numerical results, and limitations.
 
 ## Related repositories
 
