@@ -46,9 +46,7 @@
 For the Sierpiński-gasket graph at refinement level $m$,
 
 $$
-|V_m|=\frac{3^{m+1}+3}{2},
-\qquad
-N_m=2|V_m|=3^{m+1}+3,
+|V_m|=(3^{m+1}+3)/2,\quad N_m=2|V_m|=3^{m+1}+3.
 $$
 
 where $N_m$ is the dimension of the two-component SU(2) operator.
@@ -56,33 +54,23 @@ where $N_m$ is the dimension of the two-component SU(2) operator.
 The exact fourth-moment trace defect established in [Evgeny's Theorem](https://github.com/RFT-SIRM/Evgeny-Theorem/blob/main/THEOREM.md) is
 
 $$
-\Delta_m^{(4)}(\theta)
-=
--16(3^{m-1}+1)\sin^2\!\left(\frac{\theta}{2}\right).
+\Delta_m(H^4,\theta)=-16(3^{m-1}+1)\sin^2(\theta/2),\quad m\geq1.
 $$
 
 After normalization by $N_m$, the scalar invariant used in this repository is
 
 $$
-I_m(\theta)
-=
--16\frac{3^{m-1}+1}{3^{m+1}+3}
-\sin^2\!\left(\frac{\theta}{2}\right).
+I_m(\theta)=-16\frac{3^{m-1}+1}{3^{m+1}+3}\sin^2(\theta/2).
 $$
 
 Its exact limit and finite-level remainder are
 
 $$
-I_\infty(\theta)
-=
--\frac{16}{9}\sin^2\!\left(\frac{\theta}{2}\right),
+I_\infty(\theta)=-\frac{16}{9}\sin^2(\theta/2).
 $$
 
 $$
-I_m(\theta)-I_\infty(\theta)
-=
--\frac{32}{9(3^m+1)}
-\sin^2\!\left(\frac{\theta}{2}\right).
+I_m(\theta)-I_\infty(\theta)=-\frac{32}{9(3^m+1)}\sin^2(\theta/2).
 $$
 
 In particular, at $\theta=\pi/2$,
@@ -149,9 +137,7 @@ A refined $3\times3\times3$ conditional grid produced a best observed point with
 | $A_{\rm planck}$ | 1.0008 |
 
 $$
--\log P = 71202.82490850563,
-\qquad
-\chi^2_{\rm CMB}=142454.95099736075.
+-\log P=71202.82490850563,\quad \chi^2_{\rm CMB}=142454.95099736075.
 $$
 
 | Likelihood contribution | $\chi^2$ |
@@ -183,7 +169,7 @@ This identifies the likelihood component responsible for those two raw rejection
 With the other parameters fixed at the FCN26 control point, a bisection scan found the conditional support boundary
 
 $$
-n_s^\ast = 1.02374434007214
+n_s^\ast=1.02374434007214.
 $$
 
 at $\omega_b h^2=0.01999994830543$, $H_0=99.99$, and $\omega_c h^2=0$. The transition is controlled by the lower native TT spline bound at $\ell=15$. A change of $10^{-7}$ to either side changes the raw native TT result from finite to $-\infty$.
@@ -206,15 +192,11 @@ The subsequent scan varied only $n_s$ and $\omega_b h^2$, holding the other para
 For compact description only, let $x=\omega_b h^2-0.02$. Separate empirical regressions on the two disconnected branches are
 
 $$
-\text{lower branch:}\quad
-n_s^\ast \approx
-122.0075971x^2-1.746349867x+1.02375269,
+n_s^\ast\approx122.0075971x^2-1.746349867x+1.02375269.
 $$
 
 $$
-\text{upper branch:}\quad
-n_s^\ast \approx
--1.532107716x+1.023667508.
+n_s^\ast\approx-1.532107716x+1.023667508.
 $$
 
 The RMS residuals are $6.30817\times10^{-6}$ and $2.31827\times10^{-6}$, respectively. These are descriptive interpolants over the sampled intervals, **not physical laws or global parameter constraints**; no polynomial was fitted across the CAMB-failure gap.
@@ -278,6 +260,15 @@ Only the following two repositories are directly relevant to the mathematical li
 - **[Phi-Genesis](https://github.com/RFT-SIRM/Phi-Genesis)** — a separate Sierpiński-graph spectral project, including a scalar signed-$Z_2$ H¹⁰ programme. Its operator and proof status must not be conflated with the SU(2) moments or with this cosmology model.
 
 These are **research-lineage references, not software dependencies** of the Python or Lean projects in this repository. The QPU architecture and invariant-battery projects are not dependencies or mathematical inputs to this cosmology codebase and are intentionally not listed as related repositories.
+
+## Authorship and correspondence
+
+**Evgeniy Zaprudnov**  
+*Research author · RFT-SIRM*
+
+For research correspondence, use [evgeniyzaprudnov@gmail.com](mailto:evgeniyzaprudnov@gmail.com?subject=RFT-Cosmology-Genesis%20research%20enquiry). For machine-readable author and citation metadata, see [CITATION.cff](CITATION.cff).
+
+---
 
 ## Citation and license
 

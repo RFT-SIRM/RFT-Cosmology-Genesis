@@ -3,7 +3,10 @@ title: "RFT-Cosmology-Genesis"
 message: "If you use this repository, please cite the repository and its associated mathematical source."
 type: software
 authors:
-  - family-names: "RFT-SIRM"
+  - family-names: "Zaprudnov"
+    given-names: "Evgeniy"
+    email: "evgeniyzaprudnov@gmail.com"
+    affiliation: "RFT-SIRM"
 version: "0.1.0"
 date-released: 2026-09-27
 repository-code: "https://github.com/RFT-SIRM/RFT-Cosmology-Genesis"
