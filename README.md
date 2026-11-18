@@ -252,7 +252,7 @@ These are **research-lineage references, not software dependencies** of the Pyth
 
 ## Authorship and correspondence
 
-**Evgeniy Zaprudnov**  
+**Evgeny Zaprudnov**  
 *Research author · RFT-SIRM*
 
 For research correspondence, use [evgeniyzaprudnov@gmail.com](mailto:evgeniyzaprudnov@gmail.com?subject=RFT-Cosmology-Genesis%20research%20enquiry). For machine-readable author and citation metadata, see [CITATION.cff](CITATION.cff).
