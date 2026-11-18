@@ -4,7 +4,7 @@ message: "If you use this repository, please cite the repository and its associa
 type: software
 authors:
   - family-names: "Zaprudnov"
-    given-names: "Evgeniy"
+    given-names: "Evgeny"
     email: "evgeniyzaprudnov@gmail.com"
     affiliation: "RFT-SIRM"
 version: "0.1.0"
